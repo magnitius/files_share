@@ -1,0 +1,5743 @@
+{
+  "title": "NLP Engine JSON Schema",
+  "what_is": "JSON Schema based on Draft7 for NLP Engine Objects instances. Cover next objects: uslovie, to_do, namerenie, formochka, key, slot, plan, classificator, behavior",
+  "version": "release/02.017rk.00/v0.1",
+  "author": "magnitius@gmail.com",
+  "contact": "magnitius@gmail.com",
+  "last_update": "2018.08.15",
+  "last_editor": "magnitius@gmail.com",
+  "definitions": {
+    "comparator": {
+      "$id": "#comparator",
+      "version": "release/02.017rk.00/v0.2",
+      "what_is": "специальный оператор сравнения",
+      "properties": {
+        "type": {
+          "what_is": "специальный оператор сравнения",
+          "type": "string",
+          "enum": [
+            "more",
+            "more_ili_equal",
+            "equal",
+            "ne_equal",
+            "less",
+            "less_ili_equal"
+          ]
+        }
+      },
+      "required": [
+        "type"
+      ]
+    },
+    "operator": {
+      "$id": "#operator",
+      "version": "release/02.017rk.00/v0.2",
+      "what_is": "специальный оператор сравнения",
+      "properties": {
+        "type": {
+          "enum": [
+            "more",
+            "more_ili_equal",
+            "equal",
+            "ne_equal",
+            "less",
+            "less_ili_equal",
+            "exists",
+            "composite"
+          ],
+          "type": "string",
+          "what_is": "оператор сравнения, возможные значения: more, more_ili_equal, equal, ne_equal, less, less_ili_equal, exists (is not None), composite"
+        },
+        "amount": {
+          "what_is": "количественная оценка",
+          "type": ["number", "string"]
+
+        }
+      },
+      "required": [
+        "type"
+      ]
+    },
+    "to_do": {
+      "$id": "#to_do",
+      "what_is": "Результатом работы сценария является ответ бота пользователю в текстовой форме, в форме кнопок или команд, обрабатываемых вне платформы. ",
+      "type": "object",
+      "version": "release/01.017rk.00/v0.1",
+      "if": {
+        "properties": {
+          "type": {
+            "type": "string"
+          }
+        },
+        "required": ["type"]
+      },
+      "then": {
+        "allOf": [
+            {
+              "if": {
+                    "properties": {
+                      "type": {
+                        "type": "string",
+                        "const": "back_to_user"
+                      }
+                    }
+                  },
+              "then": {
+                "what_is": "Тип back_to_user",
+                "properties": {
+                  "type": {
+                    "what_is": "Поле описания типа",
+                    "type": "string",
+                    "const": "back_to_user"
+                  },
+                  "uzles": {
+                    "what_is": "Поле описания типа",
+                    "type": "object",
+                    "properties": {
+                      "answer": {
+                        "what_is": "Тексты ответа клиенту, обязательное поле.",
+                        "type": "array",
+                        "items": {
+                          "type": "array",
+                          "items": {
+                            "type": "string",
+                            "what_is": "текст ответа клиенту"
+                          },
+                          "uniqueItems": true
+                        },
+                        "minItems": 0,
+                        "uniqueItems": true
+                      },
+                      "buttons": {
+                        "type": "array",
+                        "what_is": "Строчки кнопок",
+                        "items": {
+                          "type": "array",
+                          "what_is": "Тексты кнопок, опциональное поле.",
+                          "items": {
+                            "what_is": "Текст кнопки",
+                            "type": "string"
+                          },
+                          "minItems": 0,
+                          "uniqueItems": true
+                        },
+                        "minItems": 0
+                      },
+                      "other": {
+                        "what_is": "другие кастомные сущности, опциональное поле."
+                      }
+                    },
+                    "required": [
+                      "answer"
+                    ]
+                  },
+                  "support_templates": {
+                    "type": "object",
+                    "what_is": "Позволяет сделать длинный Jinja шаблон более читабельным за счёт определения временных локальных переменных и возможности их использовать при генерации других шаблонов. Каждая следующая локальная переменная может опираться на предыдущие. ",
+                    "patternProperties": {
+                      ".+": {
+                        "type": "string",
+                        "what_is": "Локальная переменная"
+                      }
+                    },
+                    "minProperties": 0
+                  }
+                },
+                "required": [
+                  "uzles"
+                ],
+                "additionalProperties": true
+              }
+            },
+            {
+              "if": {
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "enum": ["string"]
+                  }
+                }
+              },
+              "then": {
+                "what_is": "Тип string",
+                "properties": {
+                  "support_templates": {
+                    "type": "object",
+                    "what_is": "Позволяет сделать длинный Jinja шаблон более читабельным за счёт определения временных локальных переменных и возможности их использовать при генерации других шаблонов. Каждая следующая локальная переменная может опираться на предыдущие. ",
+                    "patternProperties": {
+                      ".+": {
+                        "type": "string",
+                        "what_is": "Локальная переменная"
+                      }
+                    },
+                    "minProperties": 1
+                  },
+                  "uzles": {
+                    "type": "object",
+                    "what_is": "Словарь параметров и переменных"
+                  },
+                  "type": {
+                    "what_is": "Поле описания типа",
+                    "type": "string",
+                    "enum": ["string"]
+                  },
+                  "command": {
+                    "what_is": "Поле описания типа",
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "uzles",
+                  "type",
+                  "command"
+                ],
+                "additionalProperties": true
+              }
+            },
+            {
+              "if": {
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "const": "random_key_answer"
+                  }
+                }
+              },
+              "then": {
+                "what_is": "Тип random_key_answer",
+                "properties": {
+                  "type": {
+                    "what_is": "Поле описания типа",
+                    "type": "string",
+                    "const": "back_to_user"
+                  },
+                  "uzles": {
+                    "what_is": "Поле описания типа",
+                    "type": "object",
+                    "properties": {
+                      "patternProperties": {
+                        ".+": {
+                          "type": "array",
+                          "what_is": "Набор случайных значений поля",
+                          "items": {
+                            "type": "string",
+                            "what_is": "Случайное значение"
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "support_templates": {
+                    "type": "object",
+                    "what_is": "Позволяет сделать длинный Jinja шаблон более читабельным за счёт определения временных локальных переменных и возможности их использовать при генерации других шаблонов. Каждая следующая локальная переменная может опираться на предыдущие. ",
+                    "patternProperties": {
+                      ".+": {
+                        "type": "string",
+                        "what_is": "Локальная переменная"
+                      }
+                    },
+                    "minProperties": 1
+                  }
+                },
+                "required": [
+                  "uzles"
+                ],
+                "additionalProperties": true
+              }
+            },
+            {
+              "if": {
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "const": "do_nothing"
+                  }
+                }
+              },
+              "then": {
+                "what_is": "Тип do_nothing",
+                "properties": {
+                  "support_templates": {
+                    "type": "object",
+                    "what_is": "Позволяет сделать длинный Jinja шаблон более читабельным за счёт определения временных локальных переменных и возможности их использовать при генерации других шаблонов. Каждая следующая локальная переменная может опираться на предыдущие. ",
+                    "patternProperties": {
+                      ".+": {
+                        "type": "string",
+                        "what_is": "Локальная переменная"
+                      }
+                    },
+                    "minProperties": 1
+                  },
+                  "uzles": {
+                    "type": "object",
+                    "what_is": "Словарь параметров и переменных"
+                  },
+                  "type": {
+                    "what_is": "Поле описания типа",
+                    "type": "string",
+                    "const": "do_nothing"
+                  },
+                  "command": {
+                    "what_is": "Поле описания типа",
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "uzles",
+                  "type",
+                  "command"
+                ],
+                "additionalProperties": true
+              }
+            },
+            {
+              "if": {
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "const": "run_plan"
+                  }
+                }
+              },
+              "then": {
+                "what_is": "Тип run_plan",
+                "properties": {
+                  "type": {
+                    "what_is": "Поле описания типа",
+                    "type": "string",
+                    "const": "run_plan"
+                  },
+                  "plan": {
+                    "what_is": "id сценария",
+                    "type": "string"
+                  },
+                  "text": {
+                    "what_is": "опциональный параметр передаваемого текста",
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "type",
+                  "plan"
+                ],
+                "additionalProperties": true
+              }
+            },
+            {
+              "if": {
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "const": "remove_person_info"
+                  }
+                }
+              },
+              "then": {
+                "what_is": "Тип remove_person_info",
+                "properties": {
+                  "type": {
+                    "what_is": "Поле описания типа",
+                    "type": "string",
+                    "const": "remove_person_info"
+                  }
+                },
+                "required": [
+                  "type"
+                ],
+                "additionalProperties": true
+              }
+            },
+            {
+              "if": {
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "const": "save_device_info"
+                  }
+                }
+              },
+              "then": {
+                "what_is": "Тип save_device_info",
+                "properties": {
+                  "type": {
+                    "what_is": "Поле описания типа",
+                    "type": "string",
+                    "const": "save_device_info"
+                  }
+                },
+                "required": [
+                  "type"
+                ],
+                "additionalProperties": true
+              }
+            },
+            {
+              "if": {
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "const": "remove_device_info"
+                  }
+                }
+              },
+              "then": {
+                "what_is": "Тип remove_device_info",
+                "properties": {
+                  "type": {
+                    "what_is": "Поле описания типа",
+                    "type": "string",
+                    "const": "remove_device_info"
+                  }
+                },
+                "required": [
+                  "type"
+                ],
+                "additionalProperties": true
+              }
+            },
+            {
+              "if": {
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "const": "remove_formochka_key"
+                  }
+                }
+              },
+              "then": {
+                "what_is": "Тип remove_formochka_key",
+                "properties": {
+                  "type": {
+                    "what_is": "Поле описания типа",
+                    "type": "string",
+                    "const": "remove_device_info"
+                  },
+                  "formochka": {
+                    "what_is": "Имя формы",
+                    "type": "string"
+                  },
+                  "key": {
+                    "what_is": "Имя поля",
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "type",
+                  "formochka",
+                  "key"
+                ],
+                "additionalProperties": true
+              }
+            },
+            {
+              "if": {
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "const": "remove_composite_formochka_key"
+                  }
+                }
+              },
+              "then": {
+                "what_is": "Тип remove_composite_formochka_key",
+                "properties": {
+                  "type": {
+                    "what_is": "Поле описания типа",
+                    "type": "string",
+                    "const": "remove_composite_formochka_key"
+                  },
+                  "formochka": {
+                    "what_is": "Имя композитной формы",
+                    "type": "string"
+                  },
+                  "inner_formochka": {
+                    "what_is": "Имя вложеной формы",
+                    "type": "string"
+                  },
+                  "key": {
+                    "what_is": "Имя поля",
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "type",
+                  "formochka",
+                  "key",
+                  "inner_formochka"
+                ],
+                "additionalProperties": true
+              }
+            },
+            {
+              "if": {
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "const": "fill_key"
+                  }
+                }
+              },
+              "then": {
+                "what_is": "Тип fill_key",
+                "properties": {
+                  "type": {
+                    "what_is": "Поле описания типа",
+                    "type": "string",
+                    "const": "fill_key"
+                  },
+                  "formochka": {
+                    "what_is": "Имя формы",
+                    "type": "string"
+                  },
+                  "key": {
+                    "what_is": "Имя поля",
+                    "type": "string"
+                  },
+                  "data_path": {
+                    "what_is": "Данные для заполнения",
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "type",
+                  "formochka",
+                  "key",
+                  "data_path"
+                ],
+                "additionalProperties": true
+              }
+            },
+            {
+              "if": {
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "const": "composite_fill_key"
+                  }
+                }
+              },
+              "then": {
+                "what_is": "Тип composite_fill_key",
+                "properties": {
+                  "type": {
+                    "what_is": "Поле описания типа",
+                    "type": "string",
+                    "const": "composite_fill_key"
+                  },
+                  "formochka": {
+                    "what_is": "Имя формы",
+                    "type": "string"
+                  },
+                  "key": {
+                    "what_is": "Имя поля",
+                    "type": "string"
+                  },
+                  "internal_formochka": {
+                    "what_is": "Имя вложеной формы",
+                    "type": "string"
+                  },
+                  "data_path": {
+                    "what_is": "Данные для заполнения",
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "type",
+                  "formochka",
+                  "key",
+                  "internal_formochka",
+                  "data_path"
+                ],
+                "additionalProperties": true
+              }
+            },
+            {
+              "if": {
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "const": "open_chat"
+                  }
+                }
+              },
+              "then": {
+                "what_is": "Тип open_chat",
+                "properties": {
+                  "type": {
+                    "what_is": "Поле описания типа",
+                    "type": "string",
+                    "const": "open_chat"
+                  },
+                  "to_dos": {
+                    "type": "array",
+                    "what_is": "Действие аналогично composite to_do, однако, дополнительно в Jinja-шаблонах доступно поле user_operator_dialog, в которое в момент отправки запроса сбрасывается последние X сообщений бота с оператором в виде одной строки",
+                    "items": {
+                      "what_is": "Действие (объект)",
+                      "$ref": "#/definitions/to_do"
+                    }
+                  }
+                },
+                "required": [
+                  "type",
+                  "to_dos"
+                ],
+                "additionalProperties": true
+              }
+            },
+            {
+              "if": {
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "const": "back_to_user_no_template"
+                  }
+                }
+              },
+              "then": {
+                "what_is": "Тип back_to_user_no_template",
+                "properties": {
+                  "support_templates": {
+                    "type": "object",
+                    "what_is": "Позволяет сделать длинный Jinja шаблон более читабельным за счёт определения временных локальных переменных и возможности их использовать при генерации других шаблонов. Каждая следующая локальная переменная может опираться на предыдущие. ",
+                    "patternProperties": {
+                      ".+": {
+                        "type": "string",
+                        "what_is": "Локальная переменная"
+                      }
+                    },
+                    "minProperties": 1
+                  },
+                  "uzles": {
+                    "type": "object",
+                    "what_is": "Словарь параметров и переменных"
+                  },
+                  "type": {
+                    "what_is": "Поле описания типа",
+                    "type": "string",
+                    "const": "back_to_user_no_template"
+                  }
+                },
+                "required": [
+                  "type",
+                  "uzles",
+                  "support_templates"
+                ],
+                "additionalProperties": true
+              }
+            },
+            {
+              "if": {
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "const": "in_operator_chatting"
+                  }
+                }
+              },
+              "then": {
+                "what_is": "Тип in_operator_chatting",
+                "properties": {
+                  "type": {
+                    "what_is": "Поле описания типа",
+                    "type": "string",
+                    "const": "in_operator_chatting"
+                  }
+                },
+                "required": [
+                  "type"
+                ],
+                "additionalProperties": true
+              }
+            },
+            {
+              "if": {
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "const": "reset_user_state"
+                  }
+                }
+              },
+              "then": {
+                "what_is": "Тип reset_user_state",
+                "properties": {
+                  "type": {
+                    "what_is": "Поле описания типа",
+                    "type": "string",
+                    "const": "reset_user_state"
+                  }
+                },
+                "required": [
+                  "type"
+                ],
+                "additionalProperties": true
+              }
+            },
+            {
+              "if": {
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "const": "set_nlps_user_state"
+                  }
+                }
+              },
+              "then": {
+                "what_is": "Тип set_nlps_user_state",
+                "properties": {
+                  "type": {
+                    "what_is": "Поле описания типа",
+                    "type": "string",
+                    "const": "set_nlps_user_state"
+                  }
+                },
+                "required": [
+                  "type"
+                ],
+                "additionalProperties": true
+              }
+            },
+            {
+              "if": {
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "const": "reset_message_counter"
+                  }
+                }
+              },
+              "then": {
+                "what_is": "Тип reset_message_counter",
+                "properties": {
+                  "type": {
+                    "what_is": "Поле описания типа",
+                    "type": "string",
+                    "const": "reset_message_counter"
+                  }
+                },
+                "required": [
+                  "type"
+                ],
+                "additionalProperties": true
+              }
+            },
+            {
+              "if": {
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "const": "clear_context"
+                  }
+                }
+              },
+              "then": {
+                "what_is": "Тип clear_context",
+                "properties": {
+                  "type": {
+                    "what_is": "Поле описания типа",
+                    "type": "string",
+                    "const": "clear_context"
+                  },
+                  "clear_last_keys": {
+                    "type": "boolean",
+                    "what_is": "Флаг очистки кэша"
+                  }
+                },
+                "required": [
+                  "type"
+                ],
+                "additionalProperties": true
+              }
+            },
+            {
+              "if": {
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "const": "set_person_info"
+                  }
+                }
+              },
+              "then": {
+                "what_is": "Тип set_person_info",
+                "properties": {
+                  "type": {
+                    "what_is": "Поле описания типа",
+                    "type": "string",
+                    "const": "set_person_info"
+                  },
+                  "clear_last_keys": {
+                    "type": "boolean",
+                    "what_is": "Флаг очистки кэша"
+                  }
+                },
+                "required": [
+                  "type"
+                ],
+                "additionalProperties": true
+              }
+            },
+            {
+              "if": {
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "const": "remove_person_info"
+                  }
+                }
+              },
+              "then": {
+                "what_is": "Тип remove_person_info",
+                "properties": {
+                  "type": {
+                    "what_is": "Поле описания типа",
+                    "type": "string",
+                    "const": "remove_person_info"
+                  }
+                },
+                "required": [
+                  "type"
+                ],
+                "additionalProperties": true
+              }
+            },
+            {
+              "if": {
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "const": "save_device_info"
+                  }
+                }
+              },
+              "then": {
+                "what_is": "Тип save_device_info",
+                "properties": {
+                  "type": {
+                    "what_is": "Поле описания типа",
+                    "type": "string",
+                    "const": "save_device_info"
+                  }
+                },
+                "required": [
+                  "type"
+                ],
+                "additionalProperties": true
+              }
+            },
+            {
+              "if": {
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "const": "remove_device_info"
+                  }
+                }
+              },
+              "then": {
+                "what_is": "Тип remove_device_info",
+                "properties": {
+                  "type": {
+                    "what_is": "Поле описания типа",
+                    "type": "string",
+                    "const": "remove_device_info"
+                  }
+                },
+                "required": [
+                  "type"
+                ],
+                "additionalProperties": true
+              }
+            },
+            {
+              "if": {
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "const": "save_behavior"
+                  }
+                }
+              },
+              "then": {
+                "what_is": "Тип save_behavior",
+                "properties": {
+                  "type": {
+                    "what_is": "Поле описания типа",
+                    "type": "string",
+                    "const": "save_behavior"
+                  },
+                  "behavior": {
+                    "what_is": "Имя Behavior",
+                    "type": "string"
+                  },
+                  "check_plan": {
+                    "what_is": "нужно для проверки совпадения сценария на момент отправки запроса и получении ответа.",
+                    "type": "boolean"
+                  }
+                },
+                "required": [
+                  "type",
+                  "behavior"
+                ],
+                "additionalProperties": true
+              }
+            },
+            {
+              "if": {
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "const": "run_last_plan"
+                  }
+                }
+              },
+              "then": {
+                "what_is": "Тип run_last_plan",
+                "properties": {
+                  "type": {
+                    "what_is": "Поле описания типа",
+                    "type": "string",
+                    "const": "run_last_plan"
+                  }
+                },
+                "required": [
+                  "type"
+                ],
+                "additionalProperties": true
+              }
+            },
+            {
+              "if": {
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "const": "self_service"
+                  }
+                }
+              },
+              "then": {
+                "what_is": "Тип self_service",
+                "properties": {
+                  "type": {
+                    "what_is": "Поле описания типа",
+                    "type": "string",
+                    "const": "self_service"
+                  },
+                  "behavior": {
+                    "what_is": "Имя Behavior",
+                    "type": "string"
+                  },
+                  "command_to_do": {
+                    "type": "object",
+                    "what_is": "Тип действия - string. Отправляет запрос во внешнюю систему",
+                    "properties": {
+                      "support_templates": {
+                        "type": "object",
+                        "what_is": "Позволяет сделать длинный Jinja шаблон более читабельным за счёт определения временных локальных переменных и возможности их использовать при генерации других шаблонов. Каждая следующая локальная переменная может опираться на предыдущие. ",
+                        "patternProperties": {
+                          ".+": {
+                            "type": "string",
+                            "what_is": "Локальная переменная"
+                          }
+                        },
+                        "minProperties": 1
+                      },
+                      "uzles": {
+                        "type": "object",
+                        "what_is": "Словарь параметров и переменных"
+                      },
+                      "type": {
+                        "what_is": "Поле описания типа",
+                        "type": "string",
+                        "const": "string"
+                      },
+                      "command": {
+                        "what_is": "Поле описания типа",
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "uzles",
+                      "command"
+                    ],
+                    "additionalProperties": true
+                  },
+                  "other_to_do": {
+                    "what_is": "Действие to_do которое будет выполнено вместе с command_to_do",
+                    "$ref": "#/definitions/to_do"
+                  }
+                },
+                "required": [
+                  "type",
+                  "behavior",
+                  "command_to_do"
+                ],
+                "additionalProperties": true
+              }
+            },
+            {
+              "if": {
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "const": "self_service_with_state"
+                  }
+                }
+              },
+              "then": {
+                "what_is": "Тип self_service_with_state",
+                "properties": {
+                  "type": {
+                    "what_is": "Поле описания типа",
+                    "type": "string",
+                    "const": "self_service_with_state"
+                  },
+                  "behavior": {
+                    "what_is": "Имя Behavior",
+                    "type": "string"
+                  },
+                  "command_to_do": {
+                    "type": "object",
+                    "what_is": "Тип действия - string. Отправляет запрос во внешнюю систему",
+                    "properties": {
+                      "support_templates": {
+                        "type": "object",
+                        "what_is": "Позволяет сделать длинный Jinja шаблон более читабельным за счёт определения временных локальных переменных и возможности их использовать при генерации других шаблонов. Каждая следующая локальная переменная может опираться на предыдущие. ",
+                        "patternProperties": {
+                          ".+": {
+                            "type": "string",
+                            "what_is": "Локальная переменная"
+                          }
+                        },
+                        "minProperties": 1
+                      },
+                      "uzles": {
+                        "type": "object",
+                        "what_is": "Словарь параметров и переменных"
+                      },
+                      "type": {
+                        "what_is": "Поле описания типа",
+                        "type": "string",
+                        "const": "string"
+                      },
+                      "command": {
+                        "what_is": "Поле описания типа",
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "uzles",
+                      "command"
+                    ],
+                    "additionalProperties": true
+                  },
+                  "other_to_do": {
+                    "what_is": "Действие to_do которое будет выполнено вместе с command_to_do",
+                    "$ref": "#/definitions/to_do"
+                  }
+                },
+                "required": [
+                  "type",
+                  "behavior",
+                  "command_to_do"
+                ],
+                "additionalProperties": true
+              }
+            },
+            {
+              "if": {
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "const": "to_nlps"
+                  }
+                }
+              },
+              "then": {
+                "what_is": "Тип to_nlps",
+                "properties": {
+                  "type": {
+                    "what_is": "Поле описания типа",
+                    "type": "string",
+                    "const": "to_nlps"
+                  },
+                  "send_namerenie": {
+                    "type": "boolean",
+                    "what_is": "Флаг отправки интента"
+                  }
+                },
+                "required": [
+                  "type"
+                ],
+                "additionalProperties": true
+              }
+            },
+            {
+              "if": {
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "const": "counter_increment"
+                  }
+                }
+              },
+              "then": {
+                "what_is": "Тип counter_increment",
+                "properties": {
+                  "type": {
+                    "what_is": "Поле описания типа",
+                    "type": "string",
+                    "const": "counter_increment"
+                  },
+                  "key": {
+                    "type": "string",
+                    "what_is": "Имя счетчика"
+                  }
+                },
+                "required": [
+                  "type",
+                  "key"
+                ],
+                "additionalProperties": true
+              }
+            },
+            {
+              "if": {
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "const": "counter_decrement"
+                  }
+                }
+              },
+              "then": {
+                "what_is": "Тип counter_decrement",
+                "properties": {
+                  "type": {
+                    "what_is": "Поле описания типа",
+                    "type": "string",
+                    "const": "counter_decrement"
+                  },
+                  "key": {
+                    "type": "string",
+                    "what_is": "Имя счетчика"
+                  }
+                },
+                "required": [
+                  "type",
+                  "key"
+                ],
+                "additionalProperties": true
+              }
+            },
+            {
+              "if": {
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "const": "counter_clear"
+                  }
+                }
+              },
+              "then": {
+                "what_is": "Тип counter_clear",
+                "properties": {
+                  "type": {
+                    "what_is": "Поле описания типа",
+                    "type": "string",
+                    "const": "counter_clear"
+                  },
+                  "key": {
+                    "type": "string",
+                    "what_is": "Имя счетчика"
+                  }
+                },
+                "required": [
+                  "type",
+                  "key"
+                ],
+                "additionalProperties": true
+              }
+            },
+            {
+              "if": {
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "const": "counter_set"
+                  }
+                }
+              },
+              "then": {
+                "what_is": "Тип counter_set",
+                "properties": {
+                  "type": {
+                    "what_is": "Поле описания типа",
+                    "type": "string",
+                    "const": "counter_set"
+                  },
+                  "key": {
+                    "type": "string",
+                    "what_is": "Имя счетчика"
+                  },
+                  "value": {
+                    "type": "integer",
+                    "what_is": "Значение для счетчика. Если указано, значение счётчика key меняется на value. В противном случае значение не изменяется."
+                  },
+                  "time_shift": {
+                    "type": "integer",
+                    "what_is": "Количество секунд, которые нужно добавить к счетчику"
+                  },
+                  "reset_time": {
+                    "type": "boolean",
+                    "what_is": "Флаг сброса счетчика. В случае True время создания счётчика меняется на значение time счётчика с применением time_shift (пока не используется, планируется возможность использовать время протухания)"
+                  }
+                },
+                "required": [
+                  "type",
+                  "key"
+                ],
+                "additionalProperties": true
+              }
+            },
+            {
+              "if": {
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "const": "counter_copy"
+                  }
+                }
+              },
+              "then": {
+                "what_is": "Тип counter_copy",
+                "properties": {
+                  "type": {
+                    "what_is": "Поле описания типа",
+                    "type": "string",
+                    "const": "counter_copy"
+                  },
+                  "source": {
+                    "type": "string",
+                    "what_is": "Имя счетчика - источника"
+                  },
+                  "destination": {
+                    "type": "string",
+                    "what_is": "Имя счетчика - цели назначения"
+                  },
+                  "time_shift": {
+                    "type": "integer",
+                    "what_is": "Количество секунд, которые нужно добавить к счетчику"
+                  },
+                  "reset_time": {
+                    "type": "boolean",
+                    "what_is": "Флаг сброса счетчика. В случае True время создания счётчика меняется на значение time счётчика с применением time_shift (пока не используется, планируется возможность использовать время протухания)"
+                  }
+                },
+                "required": [
+                  "type",
+                  "source",
+                  "destination"
+                ],
+                "additionalProperties": true
+              }
+            },
+            {
+              "if": {
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "const": "set_variable"
+                  }
+                }
+              },
+              "then": {
+                "what_is": "Тип set_variable",
+                "properties": {
+                  "type": {
+                    "what_is": "Поле описания типа",
+                    "type": "string",
+                    "const": "set_variable"
+                  },
+                  "key": {
+                    "type": "string",
+                    "what_is": "Имя переменной"
+                  },
+                  "value": {
+                    "type": "string",
+                    "what_is": "Значение для переменной."
+                  },
+                  "ttl": {
+                    "type": "integer",
+                    "what_is": "время жизни в секундах, после истечения – переменная будет удалена.",
+                    "minimum": 0,
+                    "maximum": 2592000
+                  }
+                },
+                "required": [
+                  "type",
+                  "key",
+                  "value"
+                ],
+                "additionalProperties": true
+              }
+            },
+            {
+              "if": {
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "const": "uslovie"
+                  }
+                }
+              },
+              "then": {
+                "what_is": "Тип uslovie",
+                "properties": {
+                  "type": {
+                    "what_is": "Поле описания типа",
+                    "type": "string",
+                    "const": "uslovie"
+                  },
+                  "to_do": {
+                    "what_is": "Действие, которое будет выполнено, в случае выполнения uslovie",
+                    "$ref": "#/definitions/to_do"
+                  },
+                  "uslovie": {
+                    "what_is": "Условие, для выполнения действия to_do",
+                    "$ref": "#/definitions/uslovie"
+                  }
+                },
+                "required": [
+                  "type",
+                  "to_do",
+                  "uslovie"
+                ],
+                "additionalProperties": true
+              }
+            },
+            {
+              "if": {
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "const": "else"
+                  }
+                }
+              },
+              "then": {
+                "what_is": "Тип else",
+                "properties": {
+                  "type": {
+                    "what_is": "Поле описания типа",
+                    "type": "string",
+                    "const": "else"
+                  },
+                  "to_do": {
+                    "what_is": "Действие, которое будет выполнено, в случае выполнения uslovie",
+                    "$ref": "#/definitions/to_do"
+                  },
+                  "uslovie": {
+                    "what_is": "Условие, для выполнения действия to_do",
+                    "$ref": "#/definitions/uslovie"
+                  },
+                  "else_to_do": {
+                    "what_is": "Действие, которое будет выполнено, в случае не выполнения uslovie",
+                    "$ref": "#/definitions/to_do"
+                  }
+                },
+                "required": [
+                  "type",
+                  "to_do",
+                  "uslovie",
+                  "else_to_do"
+                ],
+                "additionalProperties": true
+              }
+            },
+            {
+              "if": {
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "const": "choice"
+                  }
+                }
+              },
+              "then": {
+                "what_is": "Тип choice",
+                "properties": {
+                  "type": {
+                    "what_is": "Поле описания типа",
+                    "type": "string",
+                    "const": "choice"
+                  },
+                  "uslovie_to_dos": {
+                    "type": "array",
+                    "what_is": "Список объектов с to_do и uslovie для последовательного выполнения",
+                    "items": {
+                      "type": "object",
+                      "what_is": "Пара to_do + uslovie",
+                      "properties": {
+                        "to_do": {
+                          "what_is": "Действие, которое будет выполнено, в случае выполнения uslovie",
+                          "$ref": "#/definitions/to_do"
+                        },
+                        "uslovie": {
+                          "what_is": "Условие, для выполнения действия to_do",
+                          "$ref": "#/definitions/uslovie"
+                        }
+                      },
+                      "required": [
+                        "to_do",
+                        "uslovie"
+                      ],
+                      "additionalProperties": true
+                    },
+                    "minItems": 0,
+                    "uniqueItems": true
+                  },
+                  "else_to_do": {
+                    "what_is": "Действие, которое будет выполнено, в случае не выполнения uslovie",
+                    "$ref": "#/definitions/to_do"
+                  }
+                },
+                "required": [
+                  "type",
+                  "uslovie_to_dos"
+                ],
+                "additionalProperties": true
+              }
+            },
+            {
+              "if": {
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "const": "external"
+                  }
+                }
+              },
+              "then": {
+                "what_is": "Тип external",
+                "properties": {
+                  "type": {
+                    "what_is": "Поле описания типа",
+                    "type": "string",
+                    "const": "external"
+                  },
+                  "to_do": {
+                    "what_is": "Поле названия to_do",
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "type",
+                  "to_do"
+                ],
+                "additionalProperties": true
+              }
+            },
+            {
+              "if": {
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "const": "composite"
+                  }
+                }
+              },
+              "then": {
+                "what_is": "Тип composite",
+                "properties": {
+                  "type": {
+                    "what_is": "Поле описания типа",
+                    "type": "string",
+                    "const": "composite"
+                  },
+                  "to_dos": {
+                    "what_is": "Список to_do",
+                    "type": "array",
+                    "items": {
+                      "what_is": "Объект to_do",
+                      "$ref": "#/definitions/to_do"
+                    },
+                    "minItems": 0
+                  }
+                },
+                "required": [
+                  "type",
+                  "to_dos"
+                ],
+                "additionalProperties": true
+              }
+            },
+            {
+              "if": {
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "const": "nonrepeating"
+                  }
+                }
+              },
+              "then": {
+                "properties": {
+                  "type": {
+                    "what_is": "Поле описания типа",
+                    "type": "string",
+                    "const": "nonrepeating"
+                  },
+                  "to_dos": {
+                    "what_is": "Список to_do",
+                    "type": "array",
+                    "items": {
+                      "what_is": "Объект to_do",
+                      "$ref": "#/definitions/to_do"
+                    },
+                    "minItems": 0,
+                    "uniqueItems": true
+                  },
+                  "last_to_do_ids_storage": {
+                    "what_is": "Поле описания типа",
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "type",
+                  "to_dos",
+                  "last_to_do_ids_storage"
+                ],
+                "additionalProperties": true
+              }
+            }
+          ]
+      },
+      "else": {
+        "what_is": "Тип back_to_user",
+        "properties": {
+          "type": {
+            "what_is": "Поле описания типа",
+            "type": "string",
+            "const": "back_to_user"
+          },
+          "uzles": {
+            "what_is": "Поле описания типа",
+            "type": "object",
+            "properties": {
+              "answer": {
+                "what_is": "Тексты ответа клиенту, обязательное поле.",
+                "type": "array",
+                "items": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "what_is": "текст ответа клиенту"
+                  },
+                  "uniqueItems": true
+                },
+                "minItems": 0,
+                "uniqueItems": true
+              },
+              "buttons": {
+                "type": "array",
+                "what_is": "Строчки кнопок",
+                "items": {
+                  "type": "array",
+                  "what_is": "Тексты кнопок, опциональное поле.",
+                  "items": {
+                    "what_is": "Текст кнопки",
+                    "type": "string"
+                  },
+                  "minItems": 0,
+                  "uniqueItems": true
+                },
+                "minItems": 0
+              },
+              "other": {
+                "what_is": "другие кастомные сущности, опциональное поле."
+              }
+            },
+            "required": [
+              "answer"
+            ]
+          },
+          "support_templates": {
+            "type": "object",
+            "what_is": "Позволяет сделать длинный Jinja шаблон более читабельным за счёт определения временных локальных переменных и возможности их использовать при генерации других шаблонов. Каждая следующая локальная переменная может опираться на предыдущие. ",
+            "patternProperties": {
+              ".+": {
+                "type": "string",
+                "what_is": "Локальная переменная"
+              }
+            },
+            "minProperties": 1
+          }
+        },
+        "required": [
+          "uzles"
+        ],
+        "additionalProperties": true
+      }
+
+    },
+    "behavior": {
+      "$id": "#behavior",
+      "what_is": "Используется в сценариях, где требуется интеграция с внешними системами. ",
+      "title": "behavior",
+      "type": "object",
+      "version": "release/02.017rk.00/v0.1",
+      "patternProperties": {
+        ".+": {
+          "type": "object",
+          "what_is": "Используется в сценариях, где требуется интеграция с внешними системами.",
+          "properties": {
+            "timeout": {
+              "type": "number",
+              "what_is": "Время в секундах, за которое должен прийти ответ для запуска success_to_do. Ответ, пришедший по истечении этого времени, игнорируется"
+            },
+            "success_to_do": {
+              "$ref": "#/definitions/to_do",
+              "what_is": "Действие, которое исполняется в успешном случае: payload не пустой, timeout не прошёл, сценарий за время ответа не сменился"
+            },
+            "fail_to_do": {
+              "$ref": "#/definitions/to_do",
+              "what_is": "Выполняется в случае пустого payload в сообщении. Такое сообщение может прийти, когда PA либо получил ошибку при исполнении запроса, либо не получил ответ за заданное на PA время.\n\nЕсли значение не задано, входящее сообщение игнорируется"
+            },
+            "misstate": {
+              "$ref": "#/definitions/to_do",
+              "what_is": "Выполняется в случае смены сценария за время получения ответа.\n\nЕсли значение не задано, входящее сообщение игнорируется"
+            }
+          },
+          "required": [
+            "timeout",
+            "success_to_do"
+          ],
+          "additionalProperties": true
+        }
+      }
+    },
+    "classificator": {
+      "$id": "#classificator",
+      "what_is": "",
+      "title": "classificator",
+      "type": "object",
+      "additionalProperties": true,
+      "version": "release/02.017rk.00/v0.1",
+      "patternProperties": {
+        ".+": {
+          "what_is": "Классификатор, возвращающий отсортированный список наиболее вероятных вариантов из заданного множества, прошедших задаваемый порог уверенности. Также с каждым вариантом указывается уверенность и принадлежность к классу other. Используется как при определении namerenie, так и в других местах, например, uslovie и slot.",
+          "type": "object",
+          "allOf": [
+                {
+                  "if": {
+                    "properties": {
+                      "type": {
+                        "type": "string",
+                        "const": "default"
+                      }
+                    }
+                  },
+                  "then": {
+                    "what_is": "Тип default",
+                    "properties": {
+                      "type": {
+                        "what_is": "Поле описания типа",
+                        "type": "string",
+                        "const": "default"
+                      },
+                      "namerenies": {
+                        "what_is": "Список интентов",
+                        "type": "array",
+                        "items": {
+                          "what_is": "Название интента",
+                          "type": "string"
+                        },
+                        "minItems": 0,
+                        "uniqueItems": true
+                      },
+                      "vectorizer": {
+                        "what_is": "пциональный параметр, позволяющий использовать переиспользовать векторизаторы, описанные в vectorizers.json",
+                        "type": "string"
+                      },
+                      "neighbors_count": {
+                        "what_is": "TODO нужно указать описание параметра",
+                        "type": "integer",
+                        "minimum": 0,
+                        "maximum": 2592000
+                      },
+                      "threshold": {
+                        "what_is": "Порог уверенности по вероятности",
+                        "type": "number",
+                        "minimum": 0,
+                        "maximum": 1
+                      },
+                      "max_wcd_samples": {
+                        "what_is": "TODO нужно указать описание параметра",
+                        "type": "number",
+                        "minimum": 0,
+                        "maximum": 1
+                      },
+                      "predict": {
+                        "what_is": "TODO нужно указать описание параметра",
+                        "type": "object"
+                      },
+                      "binary_opposite_prefixes": {
+                        "type": "array",
+                        "what_is": "TODO нужно указать описание параметра"
+                      }
+                    },
+                    "required": [
+                      "type"
+                    ],
+                    "additionalProperties": true
+                  }
+                },
+                {
+                  "if": {
+                    "properties": {
+                      "type": {
+                        "type": "string",
+                        "const": "meta"
+                      }
+                    }
+                  },
+                  "then": {
+                    "what_is": "Тип meta",
+                    "properties": {
+                      "type": {
+                        "what_is": "Поле описания типа",
+                        "type": "string",
+                        "const": "meta"
+                      },
+                      "vectorizer": {
+                        "what_is": "пциональный параметр, позволяющий использовать переиспользовать векторизаторы, описанные в vectorizers.json",
+                        "type": "string"
+                      },
+                      "path": {
+                        "what_is": "Путь до обученного классификатора",
+                        "type": "string"
+                      },
+                      "threshold": {
+                        "what_is": "Порог уверенности по вероятности",
+                        "type": "number",
+                        "minimum": 0,
+                        "maximum": 1
+                      },
+                      "namerenies": {
+                        "what_is": "Список интентов",
+                        "type": "array",
+                        "items": {
+                          "what_is": "Название интента",
+                          "type": "string"
+                        },
+                        "minItems": 0,
+                        "uniqueItems": true
+                      }
+                    },
+                    "required": [
+                      "type",
+                      "namerenies",
+                      "threshold",
+                      "path"
+                    ],
+                    "additionalProperties": true
+                  }
+                },
+                {
+                  "if": {
+                    "properties": {
+                      "type": {
+                        "type": "string",
+                        "const": "pavlov"
+                      }
+                    }
+                  },
+                  "then": {
+                    "what_is": "Тип pavlov",
+                    "properties": {
+                      "type": {
+                        "what_is": "Поле описания типа",
+                        "type": "string",
+                        "const": "pavlov"
+                      },
+                      "vectorizer": {
+                        "what_is": "пциональный параметр, позволяющий использовать переиспользовать векторизаторы, описанные в vectorizers.json",
+                        "type": "string"
+                      },
+                      "path": {
+                        "what_is": "Путь до обученного классификатора",
+                        "type": "string"
+                      },
+                      "threshold": {
+                        "what_is": "Порог уверенности по вероятности",
+                        "type": "number",
+                        "minimum": 0,
+                        "maximum": 1
+                      },
+                      "namerenies": {
+                        "what_is": "Список интентов",
+                        "type": "array",
+                        "items": {
+                          "what_is": "Название интента",
+                          "type": "string"
+                        },
+                        "minItems": 0
+                      }
+                    },
+                    "required": [
+                      "type",
+                      "namerenies",
+                      "threshold",
+                      "path"
+                    ],
+                    "additionalProperties": true
+                  }
+                },
+                {
+                  "if": {
+                    "properties": {
+                      "type": {
+                        "type": "string",
+                        "const": "skip"
+                      }
+                    }
+                  },
+                  "then": {
+                    "what_is": "Тип skip",
+                    "properties": {
+                      "type": {
+                        "what_is": "Поле описания типа",
+                        "type": "string",
+                        "const": "skip"
+                      },
+                      "namerenies": {
+                        "what_is": "Список интентов",
+                        "type": "array",
+                        "items": {
+                          "what_is": "Название интента",
+                          "type": "string"
+                        },
+                        "minItems": 0,
+                        "uniqueItems": true
+                      }
+                    },
+                    "required": [
+                      "type",
+                      "namerenies"
+                    ],
+                    "additionalProperties": true
+                  }
+                },
+                {
+                  "if": {
+                    "properties": {
+                      "type": {
+                        "type": "string",
+                        "const": "sklearn_what_is_classificator"
+                      }
+                    }
+                  },
+                  "then": {
+                    "what_is": "Тип sklearn_what_is_classificator",
+                    "properties": {
+                      "type": {
+                        "what_is": "Поле описания типа",
+                        "type": "string",
+                        "const": "sklearn_what_is_classificator"
+                      },
+                      "path": {
+                        "what_is": "Путь до обученного классификатора",
+                        "type": "string"
+                      },
+                      "threshold": {
+                        "what_is": "Порог уверенности по вероятности",
+                        "type": "number",
+                        "minimum": 0,
+                        "maximum": 1
+                      },
+                      "preprocessing_model": {
+                        "type": "object",
+                        "what_is": "описание шага предобработки входящего текста. Пока всегда пустой словарь, предполагается расширение возможностей по указанию способов использования предобработонного текста. На текущий момент классификатору передаётся строка, склеенная из лемм."
+                      },
+                      "vectorizer_model": {
+                        "type": "object",
+                        "what_is": "описание способа векторизации текста. В type передаётся способ векторизации, в params - параметры.",
+                        "properties": {
+                          "type": {
+                            "type": "string",
+                            "enum": [
+                              "tfidf",
+                              "hash",
+                              "count"
+                            ]
+                          },
+                          "params": {
+                            "type": "object"
+                          }
+                        },
+                        "additionalProperties": true,
+                        "required": [
+                          "type",
+                          "params"
+                        ]
+                      },
+                      "classificator_model": {
+                        "type": "object",
+                        "what_is": "описание способа классификации текста.",
+                        "properties": {
+                          "type": {
+                            "type": "string",
+                            "enum": [
+                              "logreg"
+                            ]
+                          },
+                          "params": {
+                            "type": "object"
+                          }
+                        },
+                        "additionalProperties": true,
+                        "required": [
+                          "type",
+                          "params"
+                        ]
+                      },
+                      "classificator_data": {
+                        "type": "object",
+                        "what_is": "Данные, используемые для обучения модели. Используются только samples_positive, а samples_negative отсутствует.",
+                        "patternProperties": {
+                          ".+": {
+                            "type": "object",
+                            "what_is": "класс с примерами",
+                            "properties": {
+                              "samples_positive": {
+                                "type": "array",
+                                "items": {
+                                  "what_is": "позитивный пример",
+                                  "type": "string"
+                                },
+                                "uniqueItems": true
+                              }
+                            },
+                            "required": [
+                              "samples_positive"
+                            ],
+                            "additionalProperties": true
+                          }
+                        }
+                      }
+                    },
+                    "required": [
+                      "type",
+                      "preprocessing_model",
+                      "vectorizer_model",
+                      "classificator_model",
+                      "classificator_data",
+                      "path",
+                      "threshold"
+                    ],
+                    "additionalProperties": true
+                  }
+                },
+                {
+                  "if": {
+                    "properties": {
+                      "type": {
+                        "type": "string",
+                        "const": "external"
+                      }
+                    }
+                  },
+                  "then": {
+                    "what_is": "Тип external",
+                    "properties": {
+                      "type": {
+                        "what_is": "Поле описания типа",
+                        "type": "string",
+                        "const": "external"
+                      },
+                      "classificator": {
+                        "type": "string",
+                        "what_is": "Имя классификатора"
+                      }
+                    },
+                    "required": [
+                      "type",
+                      "classificator"
+                    ],
+                    "additionalProperties": true
+                  }
+                }
+              ]
+        }
+      }
+    },
+    "key": {
+      "$id": "#key",
+      "what_is": "",
+      "title": "key",
+      "type": "object",
+      "version": "release/02.017rk.00/v0.1",
+      "patternProperties": {
+        ".+": {
+          "what_is": "Описание параметра запроса, который пользователь может или должен сообщить.",
+          "type": "object",
+          "properties": {
+            "required": {
+              "type": "boolean",
+              "what_is": "Флаг, обязательно ли поле для заполнения"
+            },
+            "default_value": {
+              "what_is": "Значение поля по умолчанию"
+            },
+            "questions": {
+              "type": "array",
+              "what_is": "Уточняющие вопросы или запросы во внешние системы, которые будет сделаны, если поле обязательно для заполнения, но не заполнено",
+              "items": {
+                "what_is": " Действие для уточнения информации у внешних источников",
+                "$ref": "#/definitions/to_do"
+              },
+              "minItems": 0
+            },
+            "slot": {
+              "$ref": "#/definitions/slot",
+              "what_is": "Объект, который извлекает из текста пользователя значения для заполнения поля"
+            },
+            "need_save_context": {
+              "type": "boolean",
+              "what_is": "Если true, то значение, которым заполнено поле, может быть использовано в любой другой форме в поле с именем, совпадающим с текущем именем поля.\n\nНапример, если пользователь ищет круглосуточные банкоматы, можно использовать это заполненное поле при поиске отделений."
+            },
+            "need_load_context": {
+              "type": "boolean",
+              "what_is": "Если true и поле не заполнено, но в какой-то из форм поле с таким же названием заполнено, то будет переиспользовано то значение"
+            },
+            "uslovie": {
+              "type": "object",
+              "what_is": "Условие для определения того, что из текста пользователя можно извлечь значение для заполнения поля"
+            },
+            "key_validator": {
+              "type": "object",
+              "$comment": "сейчас это тупиковая ветвь развития валидатора, валидация не производится. @Никита Кузнецов",
+              "what_is": "После извлечения значения для заполнения поля можно осуществить проверку на допустимость такого значения. К примеру, нельзя положить на телефон 1 млн руб. Если ничего не задано, валидность не проверяется."
+            },
+            "ready": {
+              "type": "boolean",
+              "what_is": "При false поле не доступно для заполнения до тех пор, пока вопрос для этого поля не будет задан"
+            },
+            "fill_other": {
+              "type": "boolean",
+              "what_is": "Если установлен false, то в древовидных сценариях внутри одной формы после заполнения поля другие поля не будут этой формы заполнены"
+            },
+            "rewritable": {
+              "type": "boolean",
+              "what_is": "Если в форме сценария есть поле с флагом \"rewritable\": true, сценарий не будет удален из стека даже при заполнении всех обязательных полей (до истечения lifetime формы)"
+            },
+            "is_comment": {
+              "type": "boolean",
+              "what_is": "Параметр специально для сценариев, в которых в ответ от пользователя ожидается комментарий любой длины."
+            }
+          },
+          "additionalProperties": false
+        }
+      }
+    },
+    "slot": {
+      "$id": "#slot",
+      "what_is": "функция, заполняющая поле формы. Если филлер не сработал или вернул None - поле не заполняется",
+      "title": "slot",
+      "additionalProperties": true,
+      "version": "release/02.016.00/v0.2",
+      "type": "object",
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "type": "string",
+                "const": "samples"
+              }
+            }
+          },
+          "then": {
+            "what_is": "Тип samples",
+            "properties": {
+              "type": {
+                "what_is": "Поле описания типа",
+                "type": "string",
+                "const": "samples"
+              },
+              "cases": {
+                "type": "array",
+                "what_is": "Список кейсов",
+                "items": {
+                  "type": "object",
+                  "what_is": "Кейс обработки",
+                  "properties": {
+                    "value": {
+                      "what_is": "Значение для заполнения поля",
+                      "type": [
+                        "string",
+                        "number",
+                        "boolean"
+                      ]
+                    },
+                    "samples_positive": {
+                      "type": "array",
+                      "what_is": "Список строк позитивных примеров",
+                      "items": {
+                        "what_is": "Позитивный пример",
+                        "type": "string"
+                      },
+                      "uniqueItems": true
+                    },
+                    "samples_negative": {
+                      "type": "array",
+                      "what_is": "Список негативных примеров",
+                      "items": {
+                        "what_is": "Негативный пример",
+                        "type": "string"
+                      },
+                      "uniqueItems": true
+                    },
+                    "distance_scale_factor": {
+                      "type": "number",
+                      "what_is": "Порог меры уверенности по дистанции",
+                      "minimum": 0
+                    },
+                    "threshold_scale_factor": {
+                      "type": "number",
+                      "what_is": "Порог меры уверенности по вероятности",
+                      "minimum": 0
+                    }
+                  },
+                  "required": [
+                    "value",
+                    "samples_positive"
+                  ],
+                  "additionalProperties": true
+                },
+                "minItems": 0,
+                "uniqueItems": true
+              }
+            },
+            "required": [
+              "type",
+              "cases"
+            ],
+            "additionalProperties": true
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "type": "string",
+                "const": "classificator"
+              }
+            }
+          },
+          "then": {
+            "what_is": "Тип classificator",
+            "properties": {
+              "type": {
+                "what_is": "Поле описания типа",
+                "type": "string",
+                "const": "classificator"
+              },
+              "classificator": {
+                "type": "object",
+                "what_is": "Тип external",
+                "properties": {
+                  "type": {
+                    "what_is": "Поле описания типа",
+                    "type": "string",
+                    "const": "external"
+                  },
+                  "classificator": {
+                    "type": "string",
+                    "what_is": "Имя классификатора"
+                  }
+                },
+                "required": [
+                  "type",
+                  "classificator"
+                ],
+                "additionalProperties": true
+              },
+              "values": {
+                "what_is": "Используется для заполнения поля одним из перечисленных в value значений.",
+                "type": "array"
+              }
+            },
+            "required": [
+              "type",
+              "classificator",
+              "values"
+            ],
+            "additionalProperties": true
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "type": "string",
+                "const": "intersection"
+              }
+            }
+          },
+          "then": {
+            "what_is": "Тип intersection",
+            "properties": {
+              "type": {
+                "what_is": "Поле описания типа",
+                "type": "string",
+                "const": "intersection"
+              },
+              "cases": {
+                "type": "object",
+                "what_is": "Словарь кейсов",
+                "patternProperties": {
+                  ".+": {
+                    "type": "array",
+                    "what_is": "Список строк",
+                    "items": {
+                      "what_is": "Значение активации",
+                      "type": "string"
+                    },
+                    "uniqueItems": true
+                  }
+                }
+              }
+            },
+            "required": [
+              "type",
+              "cases"
+            ],
+            "additionalProperties": true
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "type": "string",
+                "const": "number_first"
+              }
+            }
+          },
+          "then": {
+            "what_is": "Тип number_first",
+            "properties": {
+              "type": {
+                "what_is": "Поле описания типа",
+                "type": "string",
+                "const": "number_first"
+              }
+            },
+            "required": [
+              "type"
+            ],
+            "additionalProperties": true
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "type": "string",
+                "const": "phone_number_first"
+              }
+            }
+          },
+          "then": {
+            "what_is": "Тип phone_number_first",
+            "properties": {
+              "type": {
+                "what_is": "Поле описания типа",
+                "type": "string",
+                "const": "phone_number_first"
+              }
+            },
+            "required": [
+              "type"
+            ],
+            "additionalProperties": true
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "type": "string",
+                "const": "currency_first"
+              }
+            }
+          },
+          "then": {
+            "what_is": "Тип currency_first",
+            "properties": {
+              "type": {
+                "what_is": "Поле описания типа",
+                "type": "string",
+                "const": "currency_first"
+              }
+            },
+            "required": [
+              "type"
+            ],
+            "additionalProperties": true
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "type": "string",
+                "const": "date"
+              }
+            }
+          },
+          "then": {
+            "what_is": "Тип date",
+            "properties": {
+              "type": {
+                "what_is": "Поле описания типа",
+                "type": "string",
+                "const": "date"
+              }
+            },
+            "required": [
+              "type"
+            ],
+            "additionalProperties": true
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "type": "string",
+                "const": "animacy_first"
+              }
+            }
+          },
+          "then": {
+            "what_is": "Тип animacy_first",
+            "properties": {
+              "type": {
+                "what_is": "Поле описания типа",
+                "type": "string",
+                "const": "animacy_first"
+              }
+            },
+            "required": [
+              "type"
+            ],
+            "additionalProperties": true
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "type": "string",
+                "const": "geo"
+              }
+            }
+          },
+          "then": {
+            "what_is": "Тип geo",
+            "properties": {
+              "type": {
+                "what_is": "Поле описания типа",
+                "type": "string",
+                "const": "geo"
+              }
+            },
+            "required": [
+              "type"
+            ],
+            "additionalProperties": true
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "type": "string",
+                "const": "organisation"
+              }
+            }
+          },
+          "then": {
+            "what_is": "Тип organisation",
+            "properties": {
+              "type": {
+                "what_is": "Поле описания типа",
+                "type": "string",
+                "const": "organisation"
+              }
+            },
+            "required": [
+              "type"
+            ],
+            "additionalProperties": true
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "type": "string",
+                "const": "person_contact"
+              }
+            }
+          },
+          "then": {
+            "what_is": "Тип person_contact",
+            "properties": {
+              "type": {
+                "what_is": "Поле описания типа",
+                "type": "string",
+                "const": "person_contact"
+              },
+              "normazlied_text": {
+                "what_is": "Нормализованный текст",
+                "type": "string"
+              },
+              "original_text": {
+                "what_is": "Оригинальный текст текст",
+                "type": "string"
+              }
+            },
+            "required": [
+              "type"
+            ],
+            "additionalProperties": true
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "type": "string",
+                "const": "phone_number_first_augmented"
+              }
+            }
+          },
+          "then": {
+            "what_is": "Тип phone_number_first_augmented",
+            "properties": {
+              "type": {
+                "what_is": "Поле описания типа",
+                "type": "string",
+                "const": "phone_number_first_augmented"
+              },
+              "normazlied_text": {
+                "what_is": "Нормализованный текст",
+                "type": "string"
+              },
+              "original_text": {
+                "what_is": "Оригинальный текст текст",
+                "type": "string"
+              }
+            },
+            "required": [
+              "type"
+            ],
+            "additionalProperties": true
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "type": "string",
+                "const": "card_first_4digits"
+              }
+            }
+          },
+          "then": {
+            "what_is": "Тип card_first_4digits",
+            "properties": {
+              "type": {
+                "what_is": "Поле описания типа",
+                "type": "string",
+                "const": "card_first_4digits"
+              }
+            },
+            "required": [
+              "type"
+            ],
+            "additionalProperties": true
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "type": "string",
+                "const": "erp_value_by_token_type_slot"
+              }
+            }
+          },
+          "then": {
+            "what_is": "Тип erp_value_by_token_type_slot",
+            "properties": {
+              "type": {
+                "what_is": "Поле описания типа",
+                "type": "string",
+                "const": "erp_value_by_token_type_slot"
+              },
+              "token_type": {
+                "what_is": "тип токена",
+                "type": "string"
+              }
+            },
+            "required": [
+              "type",
+              "token_type"
+            ],
+            "additionalProperties": true
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "type": "string",
+                "const": "notification_date_time_slot"
+              }
+            }
+          },
+          "then": {
+            "what_is": "Тип notification_date_time_slot",
+            "properties": {
+              "type": {
+                "what_is": "Поле описания типа",
+                "type": "string",
+                "const": "notification_date_time_slot"
+              }
+            },
+            "required": [
+              "type"
+            ],
+            "additionalProperties": true
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "type": "string",
+                "const": "notification_theme_slot"
+              }
+            }
+          },
+          "then": {
+            "what_is": "Тип notification_theme_slot",
+            "properties": {
+              "type": {
+                "what_is": "Поле описания типа",
+                "type": "string",
+                "const": "notification_theme_slot"
+              },
+              "notification_words": {
+                "type": "array",
+                "what_is": "TODO уточнить корректное описание",
+                "items": {
+                  "what_is": "TODO уточнить корректное описание",
+                  "type": "string"
+                }
+              }
+            },
+            "required": [
+              "type",
+              "notification_words"
+            ],
+            "additionalProperties": true
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "type": "string",
+                "const": "user_id"
+              }
+            }
+          },
+          "then": {
+            "what_is": "Тип user_id",
+            "properties": {
+              "type": {
+                "what_is": "Поле описания типа",
+                "type": "string",
+                "const": "user_id"
+              }
+            },
+            "required": [
+              "type"
+            ],
+            "additionalProperties": true
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "type": "string",
+                "const": "external"
+              }
+            }
+          },
+          "then": {
+            "what_is": "Тип external",
+            "properties": {
+              "type": {
+                "what_is": "Поле описания типа",
+                "type": "string",
+                "const": "external"
+              },
+              "slot": {
+                "what_is": "Название внешнего филлера",
+                "type": "string"
+              }
+            },
+            "required": [
+              "type",
+              "slot"
+            ],
+            "additionalProperties": true
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "type": "string",
+                "const": "approve"
+              }
+            }
+          },
+          "then": {
+            "what_is": "Тип approve",
+            "properties": {
+              "type": {
+                "what_is": "Поле описания типа",
+                "type": "string",
+                "const": "approve"
+              },
+              "yes_words": {
+                "type": "array",
+                "what_is": "Утвердительные ответы",
+                "items": {
+                  "type": "string",
+                  "what_is": "Утвердительный ответ"
+                },
+                "minItems": 0,
+                "uniqueItems": true
+              },
+              "no_words": {
+                "type": "array",
+                "what_is": "Отризательные ответы",
+                "items": {
+                  "type": "string",
+                  "what_is": "Отрицательный ответ"
+                },
+                "minItems": 0,
+                "uniqueItems": true
+              }
+            },
+            "required": [
+              "type",
+              "yes_words",
+              "no_words"
+            ],
+            "additionalProperties": true
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "type": "string",
+                "const": "approve_strictly"
+              }
+            }
+          },
+          "then": {
+            "what_is": "Тип approve_strictly",
+            "properties": {
+              "type": {
+                "what_is": "Поле описания типа",
+                "type": "string",
+                "const": "approve_strictly"
+              },
+              "yes_words": {
+                "type": "array",
+                "what_is": "Утвердительные ответы",
+                "items": {
+                  "type": "string",
+                  "what_is": "Утвердительный ответ"
+                },
+                "minItems": 0,
+                "uniqueItems": true
+              },
+              "no_words": {
+                "type": "array",
+                "what_is": "Отризательные ответы",
+                "items": {
+                  "type": "string",
+                  "what_is": "Отрицательный ответ"
+                },
+                "minItems": 0,
+                "uniqueItems": true
+              }
+            },
+            "required": [
+              "type",
+              "yes_words",
+              "no_words"
+            ],
+            "additionalProperties": true
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "type": "string",
+                "const": "regexp"
+              }
+            }
+          },
+          "then": {
+            "what_is": "Тип regexp",
+            "properties": {
+              "type": {
+                "what_is": "Поле описания типа",
+                "type": "string",
+                "const": "regexp"
+              },
+              "exp": {
+                "what_is": "Регулярное выражение",
+                "type": "string"
+              },
+              "delimiter": {
+                "what_is": "Все вхождения склеиваются в строку через delimiter и полученной строкой заполняется поле",
+                "type": "string"
+              }
+            },
+            "required": [
+              "type",
+              "exp"
+            ],
+            "additionalProperties": true
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "type": "string",
+                "const": "all_regexps"
+              }
+            }
+          },
+          "then": {
+            "what_is": "Тип all_regexps",
+            "properties": {
+              "type": {
+                "what_is": "Поле описания типа",
+                "type": "string",
+                "const": "all_regexps"
+              },
+              "exps": {
+                "type": "array",
+                "what_is": "Список регулярных выражений",
+                "items": {
+                  "what_is": "Регулярное выражение",
+                  "type": "string"
+                },
+                "minItems": 0,
+                "uniqueItems": true
+              },
+              "delimiter": {
+                "what_is": "Все вхождения склеиваются в строку через delimiter и полученной строкой заполняется поле",
+                "type": "string"
+              },
+              "original_text_lower": {
+                "type": "boolean",
+                "what_is": "Флаг веревода входящей строки в нижний регистр"
+              }
+            },
+            "required": [
+              "type",
+              "exps"
+            ],
+            "additionalProperties": true
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "type": "string",
+                "const": "regexp_string_operations"
+              }
+            }
+          },
+          "then": {
+            "what_is": "Тип regexp_string_operations",
+            "properties": {
+              "type": {
+                "what_is": "Поле описания типа",
+                "type": "string",
+                "const": "regexp_string_operations"
+              },
+              "exp": {
+                "what_is": "Регулярное выражение",
+                "type": "string"
+              },
+              "delimiter": {
+                "what_is": "Все вхождения склеиваются в строку через delimiter и полученной строкой заполняется поле",
+                "type": "string"
+              },
+              "operations": {
+                "what_is": "Список комманд",
+                "type": "array",
+                "minItems": 0,
+                "uniqueItems": true,
+                "items": {
+                  "type": "object",
+                  "what_is": "комманда"
+                }
+              }
+            },
+            "required": [
+              "type",
+              "exp",
+              "operations"
+            ],
+            "additionalProperties": true
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "type": "string",
+                "const": "cb_payload_slot"
+              }
+            }
+          },
+          "then": {
+            "what_is": "Тип cb_payload_slot",
+            "properties": {
+              "type": {
+                "what_is": "Поле описания типа",
+                "type": "string",
+                "const": "cb_payload_slot"
+              },
+              "key": {
+                "what_is": "Поле в форме",
+                "type": "string"
+              }
+            },
+            "required": [
+              "type",
+              "key"
+            ],
+            "additionalProperties": true
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "type": "string",
+                "const": "composite"
+              }
+            }
+          },
+          "then": {
+            "what_is": "Тип composite",
+            "properties": {
+              "type": {
+                "what_is": "Поле описания типа",
+                "type": "string",
+                "const": "composite"
+              },
+              "slots": {
+                "what_is": "Список филлеров",
+                "type": "array",
+                "minItems": 0,
+                "uniqueItems": true,
+                "items": {
+                  "what_is": "Филлер",
+                  "$ref": "#/definitions/slot"
+                }
+              }
+            },
+            "required": [
+              "type",
+              "slots"
+            ],
+            "additionalProperties": true
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "type": "string",
+                "const": "previous_messages_slot"
+              }
+            }
+          },
+          "then": {
+            "what_is": "Тип previous_messages_slot",
+            "properties": {
+              "type": {
+                "what_is": "Поле описания типа",
+                "type": "string",
+                "const": "previous_messages_slot"
+              },
+              "count": {
+                "type": "number",
+                "what_is": "целое число от 1 до 5 количества последних сообщений",
+                "minimum": 1,
+                "maximum": 5
+              },
+              "slot": {
+                "$ref": "#/definitions/slot"
+              }
+            },
+            "required": [
+              "type",
+              "slot"
+            ],
+            "additionalProperties": true
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "type": "string",
+                "const": "uslovie"
+              }
+            }
+          },
+          "then": {
+            "what_is": "Тип uslovie",
+            "properties": {
+              "type": {
+                "what_is": "Поле описания типа",
+                "type": "string",
+                "const": "uslovie"
+              },
+              "item": {
+                "what_is": "Филлер",
+                "$ref": "#/definitions/uslovie"
+              },
+              "uslovie": {
+                "what_is": "Условие",
+                "$ref": "#/definitions/uslovie"
+              }
+            },
+            "required": [
+              "type",
+              "uslovie",
+              "item"
+            ],
+            "additionalProperties": true
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "type": "string",
+                "const": "else"
+              }
+            }
+          },
+          "then": {
+            "what_is": "Тип else",
+            "properties": {
+              "type": {
+                "what_is": "Поле описания типа",
+                "type": "string",
+                "const": "else"
+              },
+              "uslovie": {
+                "what_is": "Условие запуска item",
+                "$ref": "#/definitions/uslovie"
+              },
+              "item": {
+                "what_is": "Выполняется, если выполянется uslovie",
+                "$ref": "#/definitions/slot"
+              },
+              "else_item": {
+                "what_is": "Выполняется, если не выполянется uslovie",
+                "$ref": "#/definitions/slot"
+              }
+            },
+            "required": [
+              "type",
+              "uslovie",
+              "item"
+            ],
+            "additionalProperties": true
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "type": "string",
+                "const": "choice"
+              }
+            }
+          },
+          "then": {
+            "what_is": "Тип choice",
+            "properties": {
+              "type": {
+                "what_is": "Поле описания типа",
+                "type": "string",
+                "const": "choice"
+              },
+              "uslovie_items": {
+                "what_is": "Список uslovies",
+                "type": "array",
+                "minItems": 0,
+                "uniqueItems": true,
+                "items": {
+                  "type": "object",
+                  "what_is": "Кейс условия",
+                  "properties": {
+                    "type": {
+                      "what_is": "Поле описания типа",
+                      "type": "string",
+                      "const": "uslovie"
+                    },
+                    "uslovie": {
+                      "what_is": "Условие запуска item",
+                      "$ref": "#/definitions/uslovie"
+                    },
+                    "item": {
+                      "what_is": "Выполняется, если выполянется uslovie",
+                      "$ref": "#/definitions/slot"
+                    }
+                  },
+                  "required": [
+                    "uslovie",
+                    "item"
+                  ],
+                  "additionalProperties": true
+                }
+              },
+              "else_item": {
+                "what_is": "Выполняется, если не выполянется uslovies",
+                "$ref": "#/definitions/slot"
+              }
+            },
+            "required": [
+              "type",
+              "uslovie_items"
+            ],
+            "additionalProperties": true
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "type": "string",
+                "const": "ready_info_slot"
+              }
+            }
+          },
+          "then": {
+            "what_is": "Тип ready_info_slot",
+            "properties": {
+              "type": {
+                "what_is": "Поле описания типа",
+                "type": "string",
+                "const": "ready_info_slot"
+              },
+              "value": {
+                "type": "string",
+                "what_is": "представляет собой строку для генерации Jinja-шаблона, в который подставляются доступные данные из user.message.payload и user.person_info.raw"
+              }
+            },
+            "required": [
+              "type",
+              "value"
+            ],
+            "additionalProperties": true
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "type": "string",
+                "const": "get_first_person"
+              }
+            }
+          },
+          "then": {
+            "what_is": "Тип get_first_person",
+            "properties": {
+              "type": {
+                "what_is": "Поле описания типа",
+                "type": "string",
+                "const": "get_first_person"
+              }
+            },
+            "required": [
+              "type"
+            ],
+            "additionalProperties": true
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "type": "string",
+                "const": "Receiverslot"
+              }
+            }
+          },
+          "then": {
+            "what_is": "Тип Receiverslot",
+            "properties": {
+              "type": {
+                "what_is": "Поле описания типа",
+                "type": "string",
+                "const": "Receiverslot"
+              },
+              "transfer_verbs": {
+                "type": "array",
+                "what_is": "Список глаголов",
+                "minItems": 0,
+                "uniqueItems": true,
+                "items": {
+                  "type": "string",
+                  "what_is": "Глагол"
+                }
+              }
+            },
+            "required": [
+              "type",
+              "transfer_verbs"
+            ],
+            "additionalProperties": true
+          }
+        }
+      ]
+    },
+    "formochka": {
+      "$id": "#formochka",
+      "what_is": "Объект набора параметров интента. В концепции slot-filling запрос клиента описывается темой обращения и набором обязательных и не обязательных параметров (форма, состоящая из слотов / полей формы), которые нужно заполнить. В рамках одной формы все поля заполняются одновременно, что позволяет не описывать конкретный порядок заполнения параметров интента, а также хранить информацию в структурированном виде и переиспользовать её от одной формы к другой.",
+      "title": "formochka",
+      "type": "object",
+      "version": "release/02.016.00/v0.2",
+      "patternProperties": {
+        ".+": {
+          "type": "object",
+          "if": {
+            "properties": {
+              "type": {
+                "type": "string",
+                "const": "composite"
+              }
+            },
+            "required": ["type"]
+          },
+          "then": {
+                "what_is": "Тип composite",
+                "properties": {
+                  "type": {
+                    "what_is": "Поле описания типа",
+                    "type": "string",
+                    "const": "composite"
+                  },
+                  "lifetime": {
+                    "what_is": "Время жизни формы, в секундах. После истечения lifetime секунд после последнего попадания в форму она удаляется.",
+                    "type": "number",
+                    "maximum": 2592000
+                  },
+                  "version": {
+                    "type": "number",
+                    "what_is": "Версия формы. Используется для интеграции с порталом настройки сценариев через Content Updater. Можно использовать для собственных нужд. по умолчанию -1"
+                  },
+                  "formochkas": {
+                    "$ref": "#/definitions/formochka"
+                  }
+                },
+                "required": [
+                  "formochkas"
+                ],
+                "additionalProperties": true
+              },
+          "else": {
+                "what_is": "Тип formochka",
+                "properties": {
+                  "type": {
+                    "what_is": "Поле описания типа",
+                    "type": "string",
+                    "const": "formochka"
+                  },
+                  "lifetime": {
+                    "what_is": "Время жизни формы, в секундах. После истечения lifetime секунд после последнего попадания в форму она удаляется.",
+                    "type": "number",
+                    "maximum": 2592000
+                  },
+                  "version": {
+                    "type": "number",
+                    "what_is": "Версия формы. Используется для интеграции с порталом настройки сценариев через Content Updater. Можно использовать для собственных нужд. по умолчанию -1"
+                  },
+                  "keys": {
+                    "$ref": "#/definitions/key"
+                  }
+                },
+                "required": [
+                  "keys"
+                ],
+                "additionalProperties": true
+              }
+        }
+      }
+    },
+    "namerenie": {
+      "$id": "#namerenie",
+      "what_is": "namerenie - намерение пользователя узнать или совершить что-либо.",
+      "title": "namerenie",
+      "type": "object",
+      "patternProperties": {
+        ".+": {
+          "type": "object",
+          "what_is": "Описание объекта namerenie",
+          "properties": {
+            "enabled": {
+              "type": "boolean",
+              "what_is": "Флаг того, включен ли данный namerenie"
+            },
+            "uslovie": {
+              "$ref": "#/definitions/uslovie",
+              "what_is": "Условие для попадание в namerenie. Позволяет разделять контент по каналам, версиям приложения, группам пользователей, состоянию и прочим вещам"
+            },
+            "version": {
+              "type": "number",
+              "what_is": "Версия набора примеров. Используется для интеграции с порталом настройки сценариев через Content Updater. Можно использовать для собственных нужд."
+            },
+            "force_update": {
+              "type": "boolean",
+              "what_is": "Флаг обновления ресурсов. Нужно уточнить актуальность"
+            },
+            "classificator": {
+              "type": "object",
+              "what_is": "Классификатор",
+              "properties": {
+                "samples_positive": {
+                  "what_is": "Примеры, по похожим на которые клиент должен попадать в данный namerenie.",
+                  "type": "array",
+                  "items": {
+                    "what_is": "Фраза позитивного примера",
+                    "type": "string"
+                  }
+                },
+                "samples_negative": {
+                  "what_is": "Примеры, по похожим на которые клиент не должен попадать в данный namerenie, хотя они и являются похожими. Используется лишь для корректировки поведения отдельного взятого интента. Вставлять сюда автоматически наборы данных из других интентов нет никакого смысла.",
+                  "type": "array",
+                  "items": {
+                    "what_is": "Фраза негативного примера",
+                    "type": "string"
+                  }
+                },
+                "threshold_scale_factor": {
+                  "what_is": "Мультипликатор порога уверенности при выборе этого интента. Чем ближе к 0, тем сильнее надо быть уверенным.",
+                  "type": "number",
+                  "minimum": 0
+                },
+                "distance_scale_factor": {
+                  "what_is": "Мультипликатор расстояний до примеров этого интента. Чем ближе к 0, тем сильнее надо быть уверенным. В отличие от threshold_scale_factor делает выбор этого namerenie более или менее приоритетным относительным других.",
+                  "type": "number",
+                  "minimum": 0
+                },
+                "other": {
+                  "what_is": "Принадлежит ли namerenie к классу прочее",
+                  "type": "boolean"
+                }
+              },
+              "additionalProperties": true
+            },
+            "plan_id": {
+              "type": "string",
+              "what_is": "Параметр для fource update"
+            }
+          },
+          "additionalProperties": true
+        }
+      }
+    },
+    "uslovie": {
+      "$id": "#uslovie",
+      "title": "uslovie",
+      "type": "object",
+      "version": "release/02.016.00/v0.2",
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "type": "string",
+                "const": "and"
+              }
+            }
+          },
+          "then": {
+            "what_is": "Тип and",
+            "properties": {
+              "type": {
+                "what_is": "Поле описания типа",
+                "type": "string",
+                "const": "and"
+              },
+              "uslovies": {
+                "type": "array",
+                "what_is": "Список объектов uslovie",
+                "items": {
+                  "what_is": "Условие",
+                  "$ref": "#/definitions/uslovie"
+                },
+                "minItems": 0,
+                "uniqueItems": true
+              }
+            },
+            "required": [
+              "type",
+              "uslovies"
+            ],
+            "additionalProperties": true
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "type": "string",
+                "const": "or"
+              }
+            }
+          },
+          "then": {
+            "what_is": "Тип or",
+            "properties": {
+              "type": {
+                "what_is": "Поле описания типа",
+                "type": "string",
+                "const": "or"
+              },
+              "uslovies": {
+                "type": "array",
+                "what_is": "Список объектов uslovie",
+                "items": {
+                  "what_is": "Условие",
+                  "$ref": "#/definitions/uslovie"
+                },
+                "minItems": 0,
+                "uniqueItems": true
+              }
+            },
+            "required": [
+              "type",
+              "uslovies"
+            ],
+            "additionalProperties": true
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "type": "string",
+                "const": "not"
+              }
+            }
+          },
+          "then": {
+            "what_is": "Тип not",
+            "properties": {
+              "type": {
+                "what_is": "Поле описания типа",
+                "type": "string",
+                "const": "not"
+              },
+              "uslovie": {
+                "what_is": "Условие",
+                "$ref": "#/definitions/uslovie"
+              }
+            },
+            "required": [
+              "type",
+              "uslovie"
+            ],
+            "additionalProperties": true
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "type": "string",
+                "const": "external"
+              }
+            }
+          },
+          "then": {
+            "what_is": "Тип external",
+            "properties": {
+              "type": {
+                "what_is": "Поле описания типа",
+                "type": "string",
+                "const": "external"
+              },
+              "uslovie": {
+                "what_is": "Название uslovie",
+                "type": "string"
+              }
+            },
+            "required": [
+              "type",
+              "uslovie"
+            ],
+            "additionalProperties": true
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "type": "string",
+                "const": "channel"
+              }
+            }
+          },
+          "then": {
+            "what_is": "Тип channel",
+            "properties": {
+              "type": {
+                "what_is": "Поле описания типа",
+                "type": "string",
+                "const": "channel"
+              },
+              "channels": {
+                "type": "array",
+                "what_is": "Список каналов",
+                "items": {
+                  "what_is": "Название канала",
+                  "type": "string"
+                },
+                "minItems": 0,
+                "uniqueItems": true
+              }
+            },
+            "required": [
+              "type",
+              "channels"
+            ],
+            "additionalProperties": true
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "type": "string",
+                "const": "ab_test"
+              }
+            }
+          },
+          "then": {
+            "what_is": "Тип ab_test",
+            "properties": {
+              "type": {
+                "what_is": "Поле описания типа",
+                "type": "string",
+                "const": "ab_test"
+              },
+              "test": {
+                "what_is": "Тест",
+                "type": "string"
+              },
+              "group": {
+                "what_is": "Группа",
+                "type": "string"
+              }
+            },
+            "required": [
+              "type",
+              "test",
+              "group"
+            ],
+            "additionalProperties": true
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "type": "string",
+                "const": "rolling"
+              }
+            }
+          },
+          "then": {
+            "what_is": "Тип rolling",
+            "properties": {
+              "type": {
+                "what_is": "Поле описания типа",
+                "type": "string",
+                "const": "rolling"
+              },
+              "percent": {
+                "what_is": "True, если хэш user_id пользователя имеет остаток от деления на 100 меньше percent. ",
+                "type": "number",
+                "minimum": 0,
+                "maximum": 100
+              }
+            },
+            "required": [
+              "type",
+              "percent"
+            ],
+            "additionalProperties": true
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "type": "string",
+                "const": "white_list"
+              }
+            }
+          },
+          "then": {
+            "what_is": "Тип white_list",
+            "properties": {
+              "type": {
+                "what_is": "Поле описания типа",
+                "type": "string",
+                "const": "white_list"
+              },
+              "users": {
+                "type": "array",
+                "what_is": "Список пользователей",
+                "items": {
+                  "what_is": "Индефикатор пользователя",
+                  "type": "string"
+                },
+                "minItems": 0,
+                "uniqueItems": true
+              }
+            },
+            "required": [
+              "type",
+              "users"
+            ],
+            "additionalProperties": true
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "type": "string",
+                "const": "random"
+              }
+            }
+          },
+          "then": {
+            "what_is": "Тип random",
+            "properties": {
+              "type": {
+                "what_is": "Поле описания типа",
+                "type": "string",
+                "const": "random"
+              },
+              "percent": {
+                "what_is": "True в percent % случаев. В отличие от ab_test и rolling не фиксирует свой выбор для конкретного пользователя, что позволяет делать эффект случайным для каждого конкретного человека.",
+                "type": "number",
+                "minimum": 0,
+                "maximum": 100
+              }
+            },
+            "required": [
+              "type",
+              "percent"
+            ],
+            "additionalProperties": true
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "type": "string",
+                "const": "user_group"
+              }
+            }
+          },
+          "then": {
+            "what_is": "Тип user_group",
+            "properties": {
+              "type": {
+                "what_is": "Поле описания типа",
+                "type": "string",
+                "const": "user_group"
+              },
+              "groups": {
+                "type": "array",
+                "what_is": "Список групп",
+                "items": {
+                  "what_is": "Индефикатор групп",
+                  "type": "string"
+                },
+                "minItems": 0,
+                "uniqueItems": true
+              }
+            },
+            "required": [
+              "type",
+              "groups"
+            ],
+            "additionalProperties": true
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "type": "string",
+                "const": "device_channel"
+              }
+            }
+          },
+          "then": {
+            "what_is": "Тип device_channel",
+            "properties": {
+              "type": {
+                "what_is": "Поле описания типа",
+                "type": "string",
+                "const": "device_channel"
+              },
+              "device_channels": {
+                "type": "array",
+                "what_is": "Список каналов",
+                "items": {
+                  "what_is": "Индефикатор канала",
+                  "type": "string"
+                },
+                "minItems": 0,
+                "uniqueItems": true
+              }
+            },
+            "required": [
+              "type",
+              "device_channels"
+            ],
+            "additionalProperties": true
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "type": "string",
+                "const": "device_channel_version"
+              }
+            }
+          },
+          "then": {
+            "what_is": "Тип device_channel_version",
+            "properties": {
+              "type": {
+                "what_is": "Поле описания типа",
+                "type": "string",
+                "const": "device_channel_version"
+              },
+              "device_channel_versions": {
+                "type": "array",
+                "what_is": "Список версий каналов",
+                "items": {
+                  "what_is": "Индефикатор версии канала",
+                  "type": "string"
+                },
+                "minItems": 0,
+                "uniqueItems": true
+              }
+            },
+            "required": [
+              "type",
+              "device_channel_versions"
+            ],
+            "additionalProperties": true
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "type": "string",
+                "const": "device_channel_version_mask"
+              }
+            }
+          },
+          "then": {
+            "what_is": "Тип device_channel_version_mask",
+            "properties": {
+              "type": {
+                "what_is": "Поле описания типа",
+                "type": "string",
+                "const": "device_channel_version_mask"
+              },
+              "operator": {
+                "$ref": "#/definitions/operator"
+              }
+            },
+            "required": [
+              "type",
+              "operator"
+            ],
+            "additionalProperties": true
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "type": "string",
+                "const": "device_platformochka"
+              }
+            }
+          },
+          "then": {
+            "what_is": "Тип device_platformochka",
+            "properties": {
+              "type": {
+                "what_is": "Поле описания типа",
+                "type": "string",
+                "const": "device_platformochka"
+              },
+              "device_platformochkas": {
+                "type": "array",
+                "what_is": "Список платформ",
+                "items": {
+                  "what_is": "Индефикатор плафтформы",
+                  "type": "string"
+                },
+                "minItems": 0,
+                "uniqueItems": true
+              }
+            },
+            "required": [
+              "type",
+              "device_platformochkas"
+            ],
+            "additionalProperties": true
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "type": "string",
+                "const": "device_platformochka_version"
+              }
+            }
+          },
+          "then": {
+            "what_is": "Тип device_platformochka_version",
+            "properties": {
+              "type": {
+                "what_is": "Поле описания типа",
+                "type": "string",
+                "const": "device_platformochka_version"
+              },
+              "device_platformochka_versions": {
+                "type": "array",
+                "what_is": "Список версий платформ",
+                "items": {
+                  "what_is": "Индефикатор версии плафтформы",
+                  "type": "string"
+                },
+                "minItems": 0,
+                "uniqueItems": true
+              }
+            },
+            "required": [
+              "type",
+              "device_platformochka_versions"
+            ],
+            "additionalProperties": true
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "type": "string",
+                "const": "message_topic"
+              }
+            }
+          },
+          "then": {
+            "what_is": "Тип message_topic",
+            "properties": {
+              "type": {
+                "what_is": "Поле описания типа",
+                "type": "string",
+                "const": "message_topic"
+              },
+              "topics": {
+                "type": "array",
+                "what_is": "Список топиков",
+                "items": {
+                  "what_is": "Индефикатор топика",
+                  "type": "string"
+                },
+                "minItems": 0,
+                "uniqueItems": true
+              }
+            },
+            "required": [
+              "type",
+              "topics"
+            ],
+            "additionalProperties": true
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "type": "string",
+                "const": "time"
+              }
+            }
+          },
+          "then": {
+            "what_is": "Тип time",
+            "properties": {
+              "type": {
+                "what_is": "Поле описания типа",
+                "type": "string",
+                "const": "time"
+              },
+              "datetime": {
+                "type": "object",
+                "what_is": "Объект времени",
+                "properties": {
+                  "year": {
+                    "what_is": "Год",
+                    "type": "string"
+                  },
+                  "month": {
+                    "what_is": "Месяц",
+                    "type": "string"
+                  },
+                  "day": {
+                    "what_is": "День",
+                    "type": "string"
+                  },
+                  "time": {
+                    "what_is": "часы:минуты",
+                    "type": "string"
+                  }
+                },
+                "additionalProperties": true
+              },
+              "comparator": {
+                "$ref": "#/definitions/comparator"
+              }
+            },
+            "required": [
+              "type",
+              "datetime"
+            ],
+            "additionalProperties": true
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "type": "string",
+                "const": "time_cut"
+              }
+            }
+          },
+          "then": {
+            "what_is": "Тип time_cut",
+            "properties": {
+              "type": {
+                "what_is": "Поле описания типа",
+                "type": "string",
+                "const": "time_cut"
+              },
+              "tb_path": {
+                "type": "string",
+                "what_is": "Локальное время клиента вычисляется на основе ТБ, взятого из ЕРИБ, путь до которого лежит"
+              },
+              "datetime_low": {
+                "type": "object",
+                "what_is": "Точка минимального значения времени",
+                "properties": {
+                  "year": {
+                    "what_is": "Год",
+                    "type": "string"
+                  },
+                  "month": {
+                    "what_is": "Месяц",
+                    "type": "string"
+                  },
+                  "day": {
+                    "what_is": "День",
+                    "type": "string"
+                  },
+                  "time": {
+                    "what_is": "часы:минуты",
+                    "type": "string"
+                  }
+                },
+                "additionalProperties": true
+              },
+              "datetime_high": {
+                "type": "object",
+                "what_is": "Точка максимального значения времени",
+                "properties": {
+                  "year": {
+                    "what_is": "Год",
+                    "type": "string"
+                  },
+                  "month": {
+                    "what_is": "Месяц",
+                    "type": "string"
+                  },
+                  "day": {
+                    "what_is": "День",
+                    "type": "string"
+                  },
+                  "time": {
+                    "what_is": "часы:минуты",
+                    "type": "string"
+                  }
+                },
+                "additionalProperties": true
+              }
+            },
+            "required": [
+              "type",
+              "tb_path",
+              "datetime_low",
+              "datetime_high"
+            ],
+            "additionalProperties": true
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "type": "string",
+                "const": "weekday"
+              }
+            }
+          },
+          "then": {
+            "what_is": "Тип weekday",
+            "properties": {
+              "type": {
+                "what_is": "Поле описания типа",
+                "type": "string",
+                "const": "weekday"
+              },
+              "tb_path": {
+                "type": "string",
+                "what_is": "Локальное время клиента вычисляется на основе ТБ, взятого из ЕРИБ, путь до которого лежит"
+              },
+              "weekday": {
+                "type": "integer",
+                "what_is": "Поле описания типа",
+                "minimum": 0,
+                "maximum": 6
+              }
+            },
+            "required": [
+              "type",
+              "tb_path",
+              "weekday"
+            ],
+            "additionalProperties": true
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "type": "string",
+                "const": "age"
+              }
+            }
+          },
+          "then": {
+            "what_is": "Тип age",
+            "properties": {
+              "type": {
+                "what_is": "Поле описания типа",
+                "type": "string",
+                "const": "age"
+              },
+              "comparator": {
+                "$ref": "#/definitions/comparator"
+              },
+              "birthday_path": {
+                "what_is": "должна содержаться дата в формате \"2019-01-31",
+                "type": "string"
+              },
+              "age": {
+                "what_is": "Возраст пользователя",
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 999
+              }
+            },
+            "required": [
+              "type",
+              "comparator",
+              "birthday_path",
+              "age"
+            ],
+            "additionalProperties": true
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "type": "string",
+                "const": "birthday"
+              }
+            }
+          },
+          "then": {
+            "what_is": "Тип birthday",
+            "properties": {
+              "type": {
+                "what_is": "Поле описания типа",
+                "type": "string",
+                "const": "birthday"
+              },
+              "birthday_path": {
+                "what_is": "должна содержаться дата в формате \"2019-01-31",
+                "type": "string"
+              },
+              "tb_path": {
+                "what_is": "должна содержаться дата в формате \"2019-01-31",
+                "type": "string"
+              }
+            },
+            "required": [
+              "type",
+              "birthday_path"
+            ],
+            "additionalProperties": true
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "type": "string",
+                "const": "person_info_key_length"
+              }
+            }
+          },
+          "then": {
+            "what_is": "Тип person_info_key_length",
+            "properties": {
+              "type": {
+                "what_is": "Поле описания типа",
+                "type": "string",
+                "const": "person_info_key_length"
+              },
+              "operator": {
+                "$ref": "#/definitions/operator"
+              },
+              "key": {
+                "what_is": "Имя поля",
+                "type": "string"
+              }
+            },
+            "required": [
+              "type",
+              "operator",
+              "key"
+            ],
+            "additionalProperties": true
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "type": "string",
+                "const": "person_info_keys_comparison"
+              }
+            }
+          },
+          "then": {
+            "what_is": "Тип person_info_keys_comparison",
+            "properties": {
+              "type": {
+                "what_is": "Поле описания типа",
+                "type": "string",
+                "const": "person_info_keys_comparison"
+              },
+              "operator": {
+                "$ref": "#/definitions/operator"
+              },
+              "key1": {
+                "what_is": "Имя поля",
+                "type": "string"
+              },
+              "key2": {
+                "what_is": "Имя поля",
+                "type": "string"
+              }
+            },
+            "required": [
+              "type",
+              "operator",
+              "key1",
+              "key2"
+            ],
+            "additionalProperties": true
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "type": "string",
+                "const": "classificator"
+              }
+            }
+          },
+          "then": {
+            "what_is": "Тип classificator",
+            "properties": {
+              "type": {
+                "what_is": "Поле описания типа",
+                "type": "string",
+                "const": "classificator"
+              },
+              "classificator": {
+                "type": "string",
+                "what_is": "Имя классификатора"
+              }
+            },
+            "required": [
+              "type",
+              "classificator"
+            ],
+            "additionalProperties": true
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "type": "string",
+                "const": "text_in_original_text"
+              }
+            }
+          },
+          "then": {
+            "what_is": "Тип text_in_original_text",
+            "properties": {
+              "type": {
+                "what_is": "Поле описания типа",
+                "type": "string",
+                "const": "text_in_original_text"
+              },
+              "substring": {
+                "type": "string",
+                "what_is": "Фраза на ссравнение"
+              }
+            },
+            "required": [
+              "type",
+              "substring"
+            ],
+            "additionalProperties": true
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "type": "string",
+                "const": "text_in_lowered_text"
+              }
+            }
+          },
+          "then": {
+            "what_is": "Тип text_in_lowered_text",
+            "properties": {
+              "type": {
+                "what_is": "Поле описания типа",
+                "type": "string",
+                "const": "text_in_lowered_text"
+              },
+              "substring": {
+                "type": "string",
+                "what_is": "Фраза на ссравнение"
+              }
+            },
+            "required": [
+              "type",
+              "substring"
+            ],
+            "additionalProperties": true
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "type": "string",
+                "const": "original_text_len"
+              }
+            }
+          },
+          "then": {
+            "what_is": "Тип original_text_len",
+            "properties": {
+              "type": {
+                "what_is": "Поле описания типа",
+                "type": "string",
+                "const": "original_text_len"
+              },
+              "min_message_len": {
+                "type": "integer",
+                "what_is": "Минимальная длина"
+              },
+              "max_message_len": {
+                "type": "integer",
+                "what_is": "Минимальная длина"
+              }
+            },
+            "required": [
+              "type",
+              "min_message_len",
+              "max_message_len"
+            ],
+            "additionalProperties": true
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "type": "string",
+                "const": "tokens_len"
+              }
+            }
+          },
+          "then": {
+            "what_is": "Тип tokens_len",
+            "properties": {
+              "type": {
+                "what_is": "Поле описания типа",
+                "type": "string",
+                "const": "tokens_len"
+              },
+              "operator": {
+                "$ref": "#/definitions/operator"
+              }
+            },
+            "required": [
+              "type",
+              "operator"
+            ],
+            "additionalProperties": true
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "type": "string",
+                "const": "intersection_with_tokens"
+              }
+            }
+          },
+          "then": {
+            "what_is": "Тип intersection_with_tokens",
+            "properties": {
+              "type": {
+                "what_is": "Поле описания типа",
+                "type": "string",
+                "const": "intersection_with_tokens"
+              },
+              "symbols": {
+                "type": "array",
+                "items": {
+                  "what_is": "Нормализованная строка",
+                  "type": "string"
+                },
+                "minItems": 0,
+                "uniqueItems": true
+              }
+            },
+            "required": [
+              "type",
+              "symbols"
+            ],
+            "additionalProperties": true
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "type": "string",
+                "const": "entering_in_tokens"
+              }
+            }
+          },
+          "then": {
+            "what_is": "Тип entering_in_tokens",
+            "properties": {
+              "type": {
+                "what_is": "Поле описания типа",
+                "type": "string",
+                "const": "entering_in_tokens"
+              },
+              "symbols": {
+                "type": "array",
+                "items": {
+                  "what_is": "Нормализованная строка",
+                  "type": "string"
+                },
+                "minItems": 0,
+                "uniqueItems": true
+              }
+            },
+            "required": [
+              "type",
+              "symbols"
+            ],
+            "additionalProperties": true
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "type": "string",
+                "const": "number_of_numbers"
+              }
+            }
+          },
+          "then": {
+            "what_is": "Тип number_of_numbers",
+            "properties": {
+              "type": {
+                "what_is": "Поле описания типа",
+                "type": "string",
+                "const": "number_of_numbers"
+              },
+              "operator": {
+                "$ref": "#/definitions/operator"
+              }
+            },
+            "required": [
+              "type",
+              "operator"
+            ],
+            "additionalProperties": true
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "type": "string",
+                "const": "animacies_number"
+              }
+            }
+          },
+          "then": {
+            "what_is": "Тип animacies_number",
+            "properties": {
+              "type": {
+                "what_is": "Поле описания типа",
+                "type": "string",
+                "const": "animacies_number"
+              },
+              "operator": {
+                "$ref": "#/definitions/operator"
+              }
+            },
+            "required": [
+              "type",
+              "operator"
+            ],
+            "additionalProperties": true
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "type": "string",
+                "const": "phone_number_number"
+              }
+            }
+          },
+          "then": {
+            "what_is": "Тип phone_number_number",
+            "properties": {
+              "type": {
+                "what_is": "Поле описания типа",
+                "type": "string",
+                "const": "phone_number_number"
+              },
+              "operator": {
+                "$ref": "#/definitions/operator"
+              }
+            },
+            "required": [
+              "type",
+              "operator"
+            ],
+            "additionalProperties": true
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "type": "string",
+                "const": "cards_number"
+              }
+            }
+          },
+          "then": {
+            "what_is": "Тип cards_number",
+            "properties": {
+              "type": {
+                "what_is": "Поле описания типа",
+                "type": "string",
+                "const": "cards_number"
+              },
+              "operator": {
+                "$ref": "#/definitions/operator"
+              }
+            },
+            "required": [
+              "type",
+              "operator"
+            ],
+            "additionalProperties": true
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "type": "string",
+                "const": "currencies_number"
+              }
+            }
+          },
+          "then": {
+            "what_is": "Тип currencies_number",
+            "properties": {
+              "type": {
+                "what_is": "Поле описания типа",
+                "type": "string",
+                "const": "currencies_number"
+              },
+              "operator": {
+                "$ref": "#/definitions/operator"
+              }
+            },
+            "required": [
+              "type",
+              "operator"
+            ],
+            "additionalProperties": true
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "type": "string",
+                "const": "samples"
+              }
+            }
+          },
+          "then": {
+            "what_is": "Тип samples",
+            "properties": {
+              "type": {
+                "what_is": "Поле описания типа",
+                "type": "string",
+                "const": "samples"
+              },
+              "samples_positive": {
+                "what_is": "Примеры, по похожим на которые клиент должен попадать в данный namerenie.",
+                "type": "array",
+                "items": {
+                  "what_is": "Фраза позитивного примера",
+                  "type": "string"
+                },
+                "uniqueItems": true
+              },
+              "samples_negative": {
+                "what_is": "Примеры, по похожим на которые клиент не должен попадать в данный namerenie, хотя они и являются похожими. Используется лишь для корректировки поведения отдельного взятого интента. Вставлять сюда автоматически наборы данных из других интентов нет никакого смысла.",
+                "type": "array",
+                "items": {
+                  "what_is": "Фраза негативного примера",
+                  "type": "string"
+                },
+                "uniqueItems": true
+              },
+              "threshold_scale_factor": {
+                "what_is": "Мультипликатор порога уверенности при выборе этого интента. Чем ближе к 0, тем сильнее надо быть уверенным.",
+                "type": "number",
+                "minimum": 0
+              }
+            },
+            "required": [
+              "type",
+              "samples_positive"
+            ],
+            "additionalProperties": true
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "type": "string",
+                "const": "formochka_key_value"
+              }
+            }
+          },
+          "then": {
+            "what_is": "Тип formochka_key_value",
+            "properties": {
+              "type": {
+                "what_is": "Поле описания типа",
+                "type": "string",
+                "const": "formochka_key_value"
+              },
+              "formochka_name": {
+                "what_is": "Название формы",
+                "type": "string"
+              },
+              "key_name": {
+                "what_is": "Имя поля",
+                "type": "string"
+              },
+              "value": {
+                "type": [
+                  "boolean",
+                  "string",
+                  "number",
+                  "object",
+                  "array"
+                ],
+                "what_is": "Поле сравнения"
+              }
+            },
+            "required": [
+              "type",
+              "formochka_name",
+              "key_name",
+              "value"
+            ],
+            "additionalProperties": true
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "type": "string",
+                "const": "internal_formochka_key_not_empty"
+              }
+            }
+          },
+          "then": {
+            "what_is": "Тип internal_formochka_key_not_empty",
+            "properties": {
+              "type": {
+                "what_is": "Поле описания типа",
+                "type": "string",
+                "const": "internal_formochka_key_not_empty"
+              },
+              "formochka": {
+                "what_is": "Название композитной формы",
+                "type": "string"
+              },
+              "internal_formochka": {
+                "what_is": "Название формы",
+                "type": "string"
+              },
+              "key": {
+                "what_is": "Имя поля",
+                "type": "string"
+              },
+              "token": {
+                "type": [
+                  "boolean",
+                  "string",
+                  "number",
+                  "object",
+                  "array"
+                ],
+                "what_is": "Значение токена"
+              }
+            },
+            "required": [
+              "type",
+              "formochka",
+              "internal_formochka",
+              "key",
+              "token"
+            ],
+            "additionalProperties": true
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "type": "string",
+                "const": "internal_formochka_key_comparison"
+              }
+            }
+          },
+          "then": {
+            "what_is": "Тип internal_formochka_key_comparison",
+            "properties": {
+              "type": {
+                "what_is": "Поле описания типа",
+                "type": "string",
+                "const": "internal_formochka_key_comparison"
+              },
+              "formochka": {
+                "what_is": "Название композитной формы",
+                "type": "string"
+              },
+              "internal_formochka": {
+                "what_is": "Название формы",
+                "type": "string"
+              },
+              "key": {
+                "what_is": "Имя поля",
+                "type": "string"
+              },
+              "operator": {
+                "$ref": "#/definitions/operator"
+              }
+            },
+            "required": [
+              "type",
+              "formochka",
+              "internal_formochka",
+              "key",
+              "operator"
+            ],
+            "additionalProperties": true
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "type": "string",
+                "const": "messages_count_comparison"
+              }
+            }
+          },
+          "then": {
+            "what_is": "Тип messages_count_comparison",
+            "properties": {
+              "type": {
+                "what_is": "Поле описания типа",
+                "type": "string",
+                "const": "messages_count_comparison"
+              },
+              "operator": {
+                "$ref": "#/definitions/operator"
+              }
+            },
+            "required": [
+              "type",
+              "operator"
+            ],
+            "additionalProperties": true
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "type": "string",
+                "const": "messages_delay_comparison"
+              }
+            }
+          },
+          "then": {
+            "what_is": "Тип messages_delay_comparison",
+            "properties": {
+              "type": {
+                "what_is": "Поле описания типа",
+                "type": "string",
+                "const": "messages_delay_comparison"
+              },
+              "operator": {
+                "$ref": "#/definitions/operator"
+              }
+            },
+            "required": [
+              "type",
+              "operator"
+            ],
+            "additionalProperties": true
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "type": "string",
+                "const": "last_close_chat_delay_comparison"
+              }
+            }
+          },
+          "then": {
+            "what_is": "Тип last_close_chat_delay_comparison",
+            "properties": {
+              "type": {
+                "what_is": "Поле описания типа",
+                "type": "string",
+                "const": "last_close_chat_delay_comparison"
+              },
+              "operator": {
+                "$ref": "#/definitions/operator"
+              }
+            },
+            "required": [
+              "type",
+              "operator"
+            ],
+            "additionalProperties": true
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "type": "string",
+                "const": "duplicated_message"
+              }
+            }
+          },
+          "then": {
+            "what_is": "Тип duplicated_message",
+            "properties": {
+              "type": {
+                "what_is": "Поле описания типа",
+                "type": "string",
+                "const": "duplicated_message"
+              }
+            },
+            "required": [
+              "type"
+            ],
+            "additionalProperties": true
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "type": "string",
+                "const": "formochkas_keys_comparison"
+              }
+            }
+          },
+          "then": {
+            "what_is": "Тип formochkas_keys_comparison",
+            "properties": {
+              "type": {
+                "what_is": "Поле описания типа",
+                "type": "string",
+                "const": "formochkas_keys_comparison"
+              },
+              "formochka": {
+                "what_is": "Форма для сравнения",
+                "type": "string"
+              },
+              "first_key": {
+                "what_is": "Поле для сравнения",
+                "type": "string"
+              },
+              "second_key": {
+                "what_is": "Поле для сравнения",
+                "type": "string"
+              },
+              "comparator": {
+                "$ref": "#/definitions/comparator"
+              }
+            },
+            "required": [
+              "type",
+              "formochka",
+              "first_key",
+              "second_key",
+              "comparator"
+            ],
+            "additionalProperties": true
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "type": "string",
+                "const": "internal_formochka_keys_comparator"
+              }
+            }
+          },
+          "then": {
+            "what_is": "Тип internal_formochka_keys_comparator",
+            "properties": {
+              "type": {
+                "what_is": "Поле описания типа",
+                "type": "string",
+                "const": "internal_formochka_keys_comparator"
+              },
+              "formochka": {
+                "what_is": "Форма для сравнения",
+                "type": "string"
+              },
+              "internal_first_formochka": {
+                "what_is": "Форма для сравнения",
+                "type": "string"
+              },
+              "internal_second_formochka": {
+                "what_is": "Форма для сравнения",
+                "type": "string"
+              },
+              "first_key": {
+                "what_is": "Поле для сравнения",
+                "type": "string"
+              },
+              "second_key": {
+                "what_is": "Поле для сравнения",
+                "type": "string"
+              },
+              "comparator": {
+                "$ref": "#/definitions/comparator"
+              }
+            },
+            "required": [
+              "type",
+              "formochka",
+              "internal_first_formochka",
+              "internal_second_formochka",
+              "first_key",
+              "second_key",
+              "comparator"
+            ],
+            "additionalProperties": true
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "type": "string",
+                "const": "internal_formochka_key_length"
+              }
+            }
+          },
+          "then": {
+            "what_is": "Тип internal_formochka_key_length",
+            "properties": {
+              "type": {
+                "what_is": "Поле описания типа",
+                "type": "string",
+                "const": "internal_formochka_key_length"
+              },
+              "formochka": {
+                "what_is": "Название композитной формы",
+                "type": "string"
+              },
+              "internal_formochka": {
+                "what_is": "Название формы",
+                "type": "string"
+              },
+              "key": {
+                "what_is": "Имя поля",
+                "type": "string"
+              },
+              "operator": {
+                "$ref": "#/definitions/operator"
+              }
+            },
+            "required": [
+              "type",
+              "formochka",
+              "internal_formochka",
+              "key",
+              "operator"
+            ],
+            "additionalProperties": true
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "type": "string",
+                "const": "internal_formochka_key_date_delta"
+              }
+            }
+          },
+          "then": {
+            "what_is": "Тип internal_formochka_key_date_delta",
+            "properties": {
+              "type": {
+                "what_is": "Поле описания типа",
+                "type": "string",
+                "const": "internal_formochka_key_date_delta"
+              },
+              "formochka": {
+                "what_is": "Название композитной формы",
+                "type": "string"
+              },
+              "internal_formochka": {
+                "what_is": "Название формы",
+                "type": "string"
+              },
+              "key": {
+                "what_is": "Имя поля",
+                "type": "string"
+              },
+              "start_date": {
+                "what_is": "строка в формате yyyy-mm-dd или yyyy-m-dd. По умолчанию текущий день вызова условия",
+                "type": "string"
+              },
+              "delta_y": {
+                "what_is": "Разница в годах",
+                "type": "integer"
+              },
+              "delta_m": {
+                "what_is": "разница в месяцах",
+                "type": "integer"
+              },
+              "delta_d": {
+                "what_is": "Разница в днях",
+                "type": "integer"
+              },
+              "comparator": {
+                "$ref": "#/definitions/comparator"
+              }
+            },
+            "required": [
+              "type",
+              "formochka",
+              "internal_formochka",
+              "key",
+              "comparator",
+              "start_date",
+              "delta_y",
+              "delta_m",
+              "delta_d"
+            ],
+            "additionalProperties": true
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "type": "string",
+                "const": "environment"
+              }
+            }
+          },
+          "then": {
+            "what_is": "Тип environment",
+            "properties": {
+              "type": {
+                "what_is": "Поле описания типа",
+                "type": "string",
+                "const": "environment"
+              },
+              "values": {
+                "what_is": "если модель исполняется на стенде из числа values. Так, например, можно ограничить сценарий для исполнения только на тестовых средах.",
+                "type": "array",
+                "items": {
+                  "what_is": "Значение переменной",
+                  "type": "string",
+                  "enum": [
+                    "ift",
+                    "uat",
+                    "pt",
+                    "prod",
+                    "dev",
+                    "prom"
+                  ],
+                  "minItems": 0,
+                  "uniqueItems": true
+                }
+              }
+            },
+            "required": [
+              "type",
+              "values"
+            ],
+            "additionalProperties": true
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "type": "string",
+                "const": "GPU_ready"
+              }
+            }
+          },
+          "then": {
+            "what_is": "Тип GPU_ready",
+            "properties": {
+              "type": {
+                "what_is": "Поле описания типа",
+                "type": "string",
+                "const": "GPU_ready"
+              }
+            },
+            "required": [
+              "type"
+            ],
+            "additionalProperties": true
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "type": "string",
+                "const": "counter_value"
+              }
+            }
+          },
+          "then": {
+            "what_is": "Тип counter_value",
+            "properties": {
+              "type": {
+                "what_is": "Поле описания типа",
+                "type": "string",
+                "const": "counter_value"
+              },
+              "operator": {
+                "$ref": "#/definitions/operator"
+              },
+              "key": {
+                "type": "string",
+                "what_is": "Имя счетчика"
+              }
+            },
+            "required": [
+              "type",
+              "operator",
+              "key"
+            ],
+            "additionalProperties": true
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "type": "string",
+                "const": "counter_time"
+              }
+            }
+          },
+          "then": {
+            "what_is": "Тип counter_time",
+            "properties": {
+              "type": {
+                "what_is": "Поле описания типа",
+                "type": "string",
+                "const": "counter_time"
+              },
+              "operator": {
+                "$ref": "#/definitions/operator"
+              },
+              "key": {
+                "type": "string",
+                "what_is": "Имя счетчика"
+              }
+            },
+            "required": [
+              "type",
+              "operator",
+              "key"
+            ],
+            "additionalProperties": true
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "type": "string",
+                "const": "composite_counter_value_comparison"
+              }
+            }
+          },
+          "then": {
+            "what_is": "Тип composite_counter_value_comparison",
+            "properties": {
+              "type": {
+                "what_is": "Поле описания типа",
+                "type": "string",
+                "const": "composite_counter_value_comparison"
+              },
+              "key1": {
+                "type": "string",
+                "what_is": "Имя значения"
+              },
+              "key2": {
+                "type": "string",
+                "what_is": "Имя значения"
+              },
+              "comparator": {
+                "$ref": "#/definitions/comparator"
+              }
+            },
+            "required": [
+              "type",
+              "comparator",
+              "key1",
+              "key2"
+            ],
+            "additionalProperties": true
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "type": "string",
+                "const": "variable_comparison"
+              }
+            }
+          },
+          "then": {
+            "what_is": "Тип variable_comparison",
+            "properties": {
+              "type": {
+                "what_is": "Поле описания типа",
+                "type": "string",
+                "const": "variable_comparison"
+              },
+              "operator": {
+                "$ref": "#/definitions/operator"
+              },
+              "key": {
+                "type": "string",
+                "what_is": "Имя счетчика"
+              }
+            },
+            "required": [
+              "type",
+              "operator",
+              "key"
+            ],
+            "additionalProperties": true
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "type": "string",
+                "const": "ask_for_feedback"
+              }
+            }
+          },
+          "then": {
+            "what_is": "Тип ask_for_feedback",
+            "properties": {
+              "type": {
+                "what_is": "Поле описания типа",
+                "type": "string",
+                "const": "ask_for_feedback"
+              },
+              "number_of_hours": {
+                "type": "integer",
+                "what_is": "Проверка, что с времени последнего опроса оценки оператора чата прошло больше number_of_hours часов. "
+              },
+              "comparator": {
+                "$ref": "#/definitions/comparator"
+              }
+            },
+            "required": [
+              "type",
+              "number_of_hours",
+              "comparator"
+            ],
+            "additionalProperties": true
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "type": "string",
+                "const": "comment_uslovie"
+              }
+            }
+          },
+          "then": {
+            "what_is": "Тип comment_uslovie",
+            "properties": {
+              "type": {
+                "what_is": "Поле описания типа",
+                "type": "string",
+                "const": "comment_uslovie"
+              }
+            },
+            "required": [
+              "type"
+            ],
+            "additionalProperties": true
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "type": "string",
+                "const": "date_in_list"
+              }
+            }
+          },
+          "then": {
+            "what_is": "Тип date_in_list",
+            "properties": {
+              "type": {
+                "what_is": "Поле описания типа",
+                "type": "string",
+                "const": "date_in_list"
+              },
+              "dates": {
+                "type": "array",
+                "items": {
+                  "what_is": "Дата",
+                  "type": "string"
+                },
+                "minItems": 0,
+                "uniqueItems": true
+              },
+              "tb_path": {
+                "type": "string",
+                "what_is": "Локальное время клиента вычисляется на основе ТБ, взятого из ЕРИБ, путь до которого лежит"
+              }
+            },
+            "required": [
+              "type",
+              "dates",
+              "tb_path"
+            ],
+            "additionalProperties": true
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "type": "string",
+                "const": "message_name"
+              }
+            }
+          },
+          "then": {
+            "what_is": "Тип message_name",
+            "properties": {
+              "type": {
+                "what_is": "Поле описания типа",
+                "type": "string",
+                "const": "message_name"
+              },
+              "message_names": {
+                "type": "array",
+                "items": {
+                  "what_is": "сообщение",
+                  "type": "string"
+                },
+                "minItems": 0,
+                "uniqueItems": true
+              }
+            },
+            "required": [
+              "type",
+              "message_names"
+            ],
+            "additionalProperties": true
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "type": "string",
+                "const": "current_plan"
+              }
+            }
+          },
+          "then": {
+            "what_is": "Тип current_plan",
+            "properties": {
+              "type": {
+                "what_is": "Поле описания типа",
+                "type": "string",
+                "const": "current_plan"
+              },
+              "plan": {
+                "what_is": "сценарий plan",
+                "type": "string"
+              }
+            },
+            "required": [
+              "type",
+              "plan"
+            ],
+            "additionalProperties": true
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "type": "string",
+                "const": "intersection_with_tokens_stop_words"
+              }
+            }
+          },
+          "then": {
+            "what_is": "Тип intersection_with_tokens_stop_words",
+            "properties": {
+              "type": {
+                "what_is": "Поле описания типа",
+                "type": "string",
+                "const": "intersection_with_tokens_stop_words"
+              },
+              "symbols": {
+                "type": "array",
+                "items": {
+                  "what_is": "Symbol item",
+                  "type": "string"
+                },
+                "minItems": 0,
+                "uniqueItems": true
+              }
+            },
+            "required": [
+              "type",
+              "symbols"
+            ],
+            "additionalProperties": true
+          }
+        }
+      ]
+    },
+    "plan": {
+      "$id": "#plan",
+      "what_is": "",
+      "title": "plan",
+      "type": "object",
+      "additionalProperties": true,
+      "version": "release/02.016.00/v0.2",
+      "patternProperties": {
+        ".+": {
+          "type": "object",
+          "allOF": [
+            {
+              "if": {
+                "oneOf": [
+                  {
+                    "properties": {
+                      "type": {
+                        "type": "string",
+                        "const": "None"
+                      }
+                    }
+                  },
+                  {
+                    "properties": {
+                      "type": {
+                        "type": "null"
+                      }
+                    }
+                  },
+                  {
+                    "not": {
+                      "properties": {
+                        "type": {
+                        }
+                      }
+                    }
+                  }
+                ]
+              },
+              "then": {
+                "what_is": "Тип Weightplan",
+                "properties": {
+                  "type": {
+                    "what_is": "Поле описания типа",
+                    "type": "string",
+                    "const": "None"
+                  },
+                  "switched_off": {
+                    "what_is": "Флаг, выключен ли сценарий",
+                    "type": "boolean"
+                  },
+                  "version": {
+                    "what_is": "Версия сценария. Используется для интеграции с порталом настройки сценариев через Content Updater. Можно использовать для собственных нужд.",
+                    "type": "number"
+                  },
+                  "button_text": {
+                    "type": "string",
+                    "what_is": "Короткий текст, который в будущем можно будет показать клиенту для уточнения выбора сценария в виде одной из кнопок. Побочным образом используется для получения списка сценариев с понятными названиями."
+                  },
+                  "to_dos": {
+                    "what_is": "Список действий, которые выполняются при попадании в сценарий",
+                    "type": "array",
+                    "item": {
+                      "what_is": "Действие",
+                      "$ref": "#/definitions/to_do"
+                    },
+                    "formochka": {
+                      "type": "string",
+                      "what_is": "Название соответствующей formochka"
+                    },
+                    "weight": {
+                      "oneOf": [
+                        {
+                          "type": "boolean"
+                        },
+                        {
+                          "$ref": "#/definitions/uslovie"
+                        }
+                      ]
+                    }
+                  }
+                },
+                "required": [
+                  "formochka"
+                ],
+                "additionalProperties": true
+              }
+            },
+            {
+              "if": {
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "const": "formochka_filling"
+                  }
+                }
+              },
+              "then": {
+                "what_is": "Тип formochkaFillingplan",
+                "properties": {
+                  "type": {
+                    "what_is": "Поле описания типа",
+                    "type": "string",
+                    "const": "formochka_filling"
+                  },
+                  "switched_off": {
+                    "what_is": "Флаг, выключен ли сценарий",
+                    "type": "boolean"
+                  },
+                  "version": {
+                    "what_is": "Версия сценария. Используется для интеграции с порталом настройки сценариев через Content Updater. Можно использовать для собственных нужд.",
+                    "type": "number"
+                  },
+                  "button_text": {
+                    "type": "string",
+                    "what_is": "Короткий текст, который в будущем можно будет показать клиенту для уточнения выбора сценария в виде одной из кнопок. Побочным образом используется для получения списка сценариев с понятными названиями."
+                  },
+                  "to_dos": {
+                    "what_is": "Список действий, которые выполняются при попадании в сценарий",
+                    "type": "array",
+                    "item": {
+                      "what_is": "Действие",
+                      "$ref": "#/definitions/to_do"
+                    },
+                    "formochka": {
+                      "type": "string",
+                      "what_is": "Название соответствующей formochka"
+                    },
+                    "weight": {
+                      "oneOf": [
+                        {
+                          "type": "boolean"
+                        },
+                        {
+                          "$ref": "#/definitions/uslovie"
+                        }
+                      ]
+                    }
+                  }
+                },
+                "required": [
+                  "type",
+                  "formochka"
+                ],
+                "additionalProperties": true
+              }
+            },
+            {
+              "if": {
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "const": "tree"
+                  }
+                }
+              },
+              "then": {
+                "what_is": "Тип Treeplan",
+                "properties": {
+                  "type": {
+                    "what_is": "Поле описания типа",
+                    "type": "string",
+                    "const": "tree"
+                  },
+                  "switched_off": {
+                    "what_is": "Флаг, выключен ли сценарий",
+                    "type": "boolean"
+                  },
+                  "version": {
+                    "what_is": "Версия сценария. Используется для интеграции с порталом настройки сценариев через Content Updater. Можно использовать для собственных нужд.",
+                    "type": "number"
+                  },
+                  "button_text": {
+                    "type": "string",
+                    "what_is": "Короткий текст, который в будущем можно будет показать клиенту для уточнения выбора сценария в виде одной из кнопок. Побочным образом используется для получения списка сценариев с понятными названиями."
+                  },
+                  "to_dos": {
+                    "what_is": "Список действий, которые выполняются при попадании в сценарий",
+                    "type": "array",
+                    "item": {
+                      "what_is": "Действие",
+                      "$ref": "#/definitions/to_do"
+                    },
+                    "formochka": {
+                      "type": "string",
+                      "what_is": "Название соответствующей formochka"
+                    },
+                    "weight": {
+                      "oneOf": [
+                        {
+                          "type": "boolean"
+                        },
+                        {
+                          "$ref": "#/definitions/uslovie"
+                        }
+                      ]
+                    },
+                    "start_uzel_key": {
+                      "type": "string",
+                      "what_is": "Название ноды из списка plan_uzles, с которой начинается данный сценарий"
+                    },
+                    "plan_uzles": {
+                      "type": "object",
+                      "patternProperties": {
+                        ".+": {
+                          "type": "object",
+                          "properties": {
+                            "ready_uzles": {
+                              "what_is": "Список названий нод, в которые возможен переход из текущей. Эти ноды проверяются по упорядоченному списку и в случае выполнения uslovies управление передаётся ей.",
+                              "type": "array",
+                              "item": {
+                                "type": "string"
+                              }
+                            },
+                            "formochka_key": {
+                              "type": "string",
+                              "what_is": "Название формы из состава композитной формы, заполняемой на данной ноде"
+                            },
+                            "uslovie": {
+                              "$ref": "#/definitions/uslovie"
+                            },
+                            "to_dos": {
+                              "what_is": "В случае отсутствия каких-либо уточняющих вопросов / действий на поля формы выполняется список to_dos",
+                              "type": "array",
+                              "item": {
+                                "$ref": "#/definitions/to_do"
+                              }
+                            }
+                          },
+                          "required": [
+                            "ready_uzles",
+                            "formochka_key"
+                          ]
+                        }
+                      }
+                    }
+                  }
+                },
+                "required": [
+                  "formochka",
+                  "type",
+                  "start_uzel_key",
+                  "plan_uzles"
+                ],
+                "additionalProperties": true
+              }
+            },
+            {
+              "if": {
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "const": "meta_classificator"
+                  }
+                }
+              },
+              "then": {
+                "what_is": "Тип Metaclassificatorplan",
+                "properties": {
+                  "type": {
+                    "what_is": "Поле описания типа",
+                    "type": "string",
+                    "const": "meta_classificator"
+                  },
+                  "switched_off": {
+                    "what_is": "Флаг, выключен ли сценарий",
+                    "type": "boolean"
+                  },
+                  "version": {
+                    "what_is": "Версия сценария. Используется для интеграции с порталом настройки сценариев через Content Updater. Можно использовать для собственных нужд.",
+                    "type": "number"
+                  },
+                  "button_text": {
+                    "type": "string",
+                    "what_is": "Короткий текст, который в будущем можно будет показать клиенту для уточнения выбора сценария в виде одной из кнопок. Побочным образом используется для получения списка сценариев с понятными названиями."
+                  },
+                  "filter": {
+                    "what_is": "slot для выбора одного из дочерних сценариев.",
+                    "$ref": "#/definitions/slot"
+                  }
+                },
+                "required": [
+                  "type",
+                  "slot"
+                ],
+                "additionalProperties": true
+              }
+            }
+          ]
+        }
+      }
+    },
+    "kantainer": {
+      "$id": "#kantainer",
+      "what_is": "",
+      "title": "plan",
+      "type": "object",
+      "additionalProperties": true,
+      "version": "release/02.017rk.00/v0.2",
+      "patternProperties":{
+        ".+":{
+          "type": "object",
+          "patternProperties":{
+            ".+":{
+              "type": "object",
+              "properties": {
+                "uslovie": {
+                "$ref": "#/definitions/uslovie"
+              },
+                "classificator": {
+                  "$ref": "#/definitions/classificator"
+                },
+                "enabled": {
+                  "type": "boolean"
+                }
+              }
+            }
+      }
+        }
+      }
+    }
+  },
+  "oneOf": [
+    {
+      "$ref": "#/definitions/to_do"
+    },
+    {
+      "$ref": "#/definitions/behavior"
+    },
+    {
+      "$ref": "#/definitions/classificator"
+    },
+    {
+      "$ref": "#/definitions/formochka"
+    },
+    {
+      "$ref": "#/definitions/slot"
+    },
+    {
+      "$ref": "#/definitions/key"
+    },
+    {
+      "$ref": "#/definitions/namerenie"
+    },
+    {
+      "$ref": "#/definitions/uslovie"
+    },
+    {
+      "$ref": "#/definitions/plan"
+    },
+    {
+      "$ref": "#/definitions/kantainer"
+    }
+  ]
+}
